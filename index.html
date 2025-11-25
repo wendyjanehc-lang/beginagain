@@ -37,6 +37,36 @@
       gap: 0.4em;
       justify-content: center;
     }
+
+    .hero-title span {
+      display: inline-block;
+      animation: float 1.8s ease-in-out infinite;
+    }
+
+    .hero-title span:nth-child(2) {
+      animation-delay: 0.1s;
+    }
+
+    .hero-title span:nth-child(3) {
+      animation-delay: 0.2s;
+    }
+
+    .hero-title span:nth-child(4) {
+      animation-delay: 0.3s;
+    }
+
+    .hero-title span:nth-child(5) {
+      animation-delay: 0.4s;
+    }
+
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-0.25em);
+      }
+    }
   </style>
 </head>
 <body>
