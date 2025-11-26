@@ -58,6 +58,7 @@
 
     .poem-line {
       margin-bottom: 0.6rem;
+      opacity: 0;
     }
 
     .poem-line-indent-small {
@@ -86,6 +87,16 @@
       opacity: 0;
       transform: translateX(-0.2em);
       animation: char-in 0.32s steps(1, end) forwards;
+    }
+
+    .poem-line-visible {
+      opacity: 1;
+      transition: opacity 0.8s ease-out;
+    }
+
+    .poem-line-hidden {
+      opacity: 0;
+      transition: opacity 1s ease-in;
     }
 
     @keyframes char-in {
@@ -132,10 +143,12 @@
         });
       }
 
-      // letter-by-letter typewriter effect for each poem line
+      // letter-by-letter typewriter effect for each poem line,
+      // where each line appears, stays ~10s, then fades out
       const lines = Array.from(document.querySelectorAll('.poem-line'));
       const CHAR_GAP = 0.06; // seconds between characters
-      const LINE_GAP = 0.4;  // pause between lines
+      const HOLD_TIME = 10;  // seconds each full line stays visible
+      const LINE_GAP = 0.6;  // pause between lines after fade-out
 
       let globalOffset = 0;
 
@@ -163,8 +176,24 @@
           }
         }
 
-        const lineDuration = charIndex * CHAR_GAP + 0.4; // include final ease-out
-        globalOffset += lineDuration + LINE_GAP;
+        const typingDuration = charIndex * CHAR_GAP + 0.4; // until last char lands
+        const lineStartVisibleAt = lineOffset; // when first char begins
+        const lineFullyVisibleAt = lineOffset + typingDuration;
+        const lineFadeOutAt = lineFullyVisibleAt + HOLD_TIME;
+
+        // schedule visibility toggles for this line
+        setTimeout(() => {
+          line.classList.add('poem-line-visible');
+          line.classList.remove('poem-line-hidden');
+        }, lineStartVisibleAt * 1000);
+
+        setTimeout(() => {
+          line.classList.remove('poem-line-visible');
+          line.classList.add('poem-line-hidden');
+        }, lineFadeOutAt * 1000);
+
+        const totalLineSpan = (lineFadeOutAt - lineOffset) + LINE_GAP;
+        globalOffset += totalLineSpan;
       });
     });
   </script>
