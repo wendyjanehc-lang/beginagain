@@ -30,7 +30,7 @@
     }
 
     .hero-title {
-      font-family: "Mix Somn", -apple-system, BlinkMacSystemFont, system-ui, "SF Pro Text", sans-serif;
+      font-family: "Homemade Apple", cursive;
       font-size: clamp(2.4rem, 6vw, 3.2rem);
       letter-spacing: 0.08em;
       margin-bottom: 2rem;
@@ -48,60 +48,35 @@
     }
 
     .hero-signature {
-      font-family: "Mix Somn", -apple-system, BlinkMacSystemFont, system-ui, "SF Pro Text", sans-serif;
+      font-family: "Homemade Apple", cursive;
       font-size: 1.4rem;
       margin-top: 2.5rem;
     }
 
-    /* handwriting-style entrance animation */
+    /* per-letter handwriting-style animation */
     .hero-title,
     .hero-line,
     .hero-signature {
+      /* layout preserved for accessibility; animation is applied to inner spans */
+    }
+
+    .hero-animated {
+      display: inline-block;
+      white-space: pre-wrap;
+    }
+
+    .hero-char {
+      display: inline-block;
       opacity: 0;
-      transform: translateY(0.5em);
-      animation: write-in 0.8s ease forwards;
+      transform: translateY(0.35em);
+      animation: letter-in 0.4s ease forwards;
+      animation-delay: calc(var(--line-offset, 0s) + var(--char-index, 0) * 0.06s);
     }
 
-    .hero-title {
-      animation-delay: 0s;
-    }
-
-    .hero-line:nth-of-type(1) {
-      animation-delay: 0.6s;
-    }
-
-    .hero-line:nth-of-type(2) {
-      animation-delay: 1.2s;
-    }
-
-    .hero-line:nth-of-type(3) {
-      animation-delay: 1.8s;
-    }
-
-    .hero-line:nth-of-type(4) {
-      animation-delay: 2.4s;
-    }
-
-    .hero-line:nth-of-type(5) {
-      animation-delay: 3s;
-    }
-
-    .hero-line:nth-of-type(6) {
-      animation-delay: 3.6s;
-    }
-
-    .hero-line:nth-of-type(7) {
-      animation-delay: 4.2s;
-    }
-
-    .hero-signature {
-      animation-delay: 5s;
-    }
-
-    @keyframes write-in {
+    @keyframes letter-in {
       0% {
         opacity: 0;
-        transform: translateY(0.5em);
+        transform: translateY(0.35em);
       }
       100% {
         opacity: 1;
@@ -126,5 +101,27 @@
 
     <p class="hero-signature">J.</p>
   </main>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const lines = document.querySelectorAll('.hero-title, .hero-line, .hero-signature');
+
+      lines.forEach((el, lineIndex) => {
+        const text = el.textContent;
+        el.textContent = '';
+        el.classList.add('hero-animated');
+
+        let charIndex = 0;
+        for (const char of text) {
+          const span = document.createElement('span');
+          span.textContent = char;
+          span.className = 'hero-char';
+          span.style.setProperty('--char-index', charIndex);
+          span.style.setProperty('--line-offset', (lineIndex * 0.6) + 's');
+          el.appendChild(span);
+          charIndex++;
+        }
+      });
+    });
+  </script>
 </body>
 </html>
