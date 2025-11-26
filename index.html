@@ -54,10 +54,16 @@
       font-size: clamp(2.02rem, 5vw, 2.7rem);
       letter-spacing: 0.08em;
       line-height: 1.7;
+      position: relative;
+      min-height: 1.7em; /* ensures space for one line of text */
     }
 
     .poem-line {
-      margin-bottom: 0.6rem;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      margin: 0;
       opacity: 0;
     }
 
