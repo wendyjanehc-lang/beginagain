@@ -33,11 +33,11 @@
       inset: 0;
       background-image: url('Images/background.JPG');
       background-size: cover;
-      background-position: center;
+      background-position: center 45%;
       background-repeat: no-repeat;
       z-index: -1;
       transform-origin: center;
-      animation: hero-bg-zoom 30s ease-out forwards;
+      animation: hero-bg-zoom 27s ease-out forwards;
     }
 
     .hero {
@@ -52,9 +52,11 @@
     @keyframes hero-bg-zoom {
       0% {
         transform: scale(1);
+        background-position: center 40%;
       }
       100% {
         transform: scale(1.15);
+        background-position: center 80%;
       }
     }
   </style>
