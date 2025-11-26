@@ -83,21 +83,6 @@
       letter-spacing: 0.12em;
     }
 
-    .poem-logo {
-      display: block;
-      margin-top: 1.8rem;
-      max-width: 14rem;
-      width: 48%;
-      opacity: 0;
-      transform: translateY(0.75rem);
-      transition: opacity 0.9s ease-out, transform 0.9s ease-out;
-    }
-
-    .poem-logo-visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
     .poem-typing {
       display: inline-block;
       white-space: pre-wrap;
@@ -150,13 +135,6 @@
       <p class="poem-line poem-line-indent-large">in the rubble at your feet you will hear it hear it:</p>
       <p class="poem-line poem-line-indent-medium">a voice like water running through stone, saying...</p>
       <p class="poem-line poem-line-emphasis">"I'm making all things NEW"</p>
-      <img
-        id="poem-logo"
-        src="Logo/Whitetransparent.png"
-        alt="begin again logo"
-        class="poem-logo"
-        aria-hidden="true"
-      />
     </section>
 
     <audio id="bg-audio" src="Audio/HOPE.mp3" preload="auto" loop aria-hidden="true"></audio>
@@ -175,7 +153,6 @@
       // letter-by-letter typewriter effect for each poem line,
       // where each line appears, stays briefly, then fades out
       const lines = Array.from(document.querySelectorAll('.poem-line'));
-      const logo = document.getElementById('poem-logo');
       const CHAR_GAP = 0.06; // seconds between characters
       const HOLD_TIME = 1.5; // seconds each full line stays visible
       const LINE_GAP = 0.6;  // pause between lines after fade-out
@@ -221,12 +198,6 @@
         const lineStartVisibleAt = lineOffset; // when first char begins
         const lineFullyVisibleAt = lineOffset + typingDuration;
         const lineFadeOutAt = lineFullyVisibleAt + HOLD_TIME;
-
-        if (isLastLine && logo) {
-          setTimeout(() => {
-            logo.classList.add('poem-logo-visible');
-          }, lineFullyVisibleAt * 1000);
-        }
 
         // schedule visibility toggles for this line
         setTimeout(() => {
