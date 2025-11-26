@@ -116,17 +116,6 @@
       }
     }
 
-    @keyframes char-out {
-      0% {
-        opacity: 1;
-        transform: translateY(0);
-      }
-      100% {
-        opacity: 0;
-        transform: translateY(0.35em);
-      }
-    }
-
     /* stronger zoom for the hero background image */
     @keyframes hero-bg-zoom {
       0% {
@@ -161,12 +150,11 @@
       }
 
       // letter-by-letter typewriter effect for each poem line,
-      // where each line appears, holds briefly, then flows away letter by letter
+      // where each line appears, stays briefly, then fades out
       const lines = Array.from(document.querySelectorAll('.poem-line'));
       const CHAR_GAP = 0.06; // seconds between characters
       const HOLD_TIME = 1.5; // seconds each full line stays visible
       const LINE_GAP = 0.6;  // pause between lines after fade-out
-      const FADE_WINDOW = 1.2; // max time for all letters in a line to finish fading
 
       let globalOffset = 0;
 
@@ -199,26 +187,18 @@
         const lineFullyVisibleAt = lineOffset + typingDuration;
         const lineFadeOutAt = lineFullyVisibleAt + HOLD_TIME;
 
-        // schedule line visibility and flowing per-letter fade-out
+        // schedule visibility toggles for this line
         setTimeout(() => {
           line.classList.add('poem-line-visible');
           line.classList.remove('poem-line-hidden');
         }, lineStartVisibleAt * 1000);
 
         setTimeout(() => {
-          const chars = Array.from(line.querySelectorAll('.poem-char'));
-          chars.forEach((char) => {
-            const localDelay = Math.random() * 0.5; // staggered start
-            const duration = 0.25 + Math.random() * 0.5; // varied speed
-            char.style.animationName = 'char-out';
-            char.style.animationDuration = duration + 's';
-            char.style.animationTimingFunction = 'ease-in';
-            char.style.animationFillMode = 'forwards';
-            char.style.animationDelay = localDelay + 's';
-          });
+          line.classList.remove('poem-line-visible');
+          line.classList.add('poem-line-hidden');
         }, lineFadeOutAt * 1000);
 
-        const totalLineSpan = (lineFadeOutAt - lineOffset) + FADE_WINDOW + LINE_GAP;
+        const totalLineSpan = (lineFadeOutAt - lineOffset) + LINE_GAP;
         globalOffset += totalLineSpan;
       });
     });
