@@ -18,9 +18,8 @@
       min-height: 100vh;
       display: flex;
       align-items: flex-start; /* place hero toward top */
-      justify-content: flex-start; /* shift hero toward left side */
+      justify-content: center; /* center hero column */
       padding-top: 6vh; /* closer to top edge */
-      padding-left: 8vw; /* move content further from center toward left */
       font-family: "Mix Somn", -apple-system, BlinkMacSystemFont, system-ui, "SF Pro Text", sans-serif;
       background-color: #fff8e7; /* cream fallback */
       background-image: url('Images/background.JPG');
@@ -35,7 +34,7 @@
       max-width: 40rem;
       width: 100%;
       padding: 4rem 3rem;
-      text-align: left;
+      text-align: center; /* center poem lines */
     }
 
     .hero-title {
@@ -44,6 +43,8 @@
       font-size: clamp(2.02rem, 5vw, 2.7rem);
       letter-spacing: 0.08em;
       margin-bottom: 2rem;
+      text-align: left;
+      transform: translateX(-8vw); /* nudge first line further left */
     }
 
     .hero-line {
