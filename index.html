@@ -35,6 +35,7 @@
       width: 100%;
       padding: 4rem 3rem;
       text-align: center; /* center poem lines */
+      position: relative; /* allow a single line to be absolutely centered */
     }
 
     .hero-title {
@@ -45,6 +46,15 @@
       margin-bottom: 2rem;
       text-align: left;
       transform: translateX(-8vw); /* nudge first line further left */
+    }
+
+    .hero-line-rubble {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: max-content;
+      text-align: center;
     }
 
     .hero-line {
@@ -136,7 +146,7 @@
 
     <p class="hero-line">in the <strong><em>silence,</em></strong></p>
     <p class="hero-line">in the <strong><em>ache that feels <u>endless,</u></em></strong></p>
-    <p class="hero-line">in the rubble at your feet you will <strong><em>hear</em></strong> it:</p>
+    <p class="hero-line hero-line-rubble">in the rubble at your feet you will <strong><em>hear</em></strong> it:</p>
 
     <p class="hero-line">a voice like water</p>
     <p class="hero-line">running through stone,</p>
