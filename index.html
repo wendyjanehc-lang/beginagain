@@ -48,15 +48,6 @@
       position: relative;
     }
 
-    .hero-logo {
-      position: fixed;
-      left: 50%;
-      top: 52%;
-      transform: translate(-50%, -50%);
-      width: clamp(7rem, 16vw, 10rem);
-      pointer-events: none;
-    }
-
     /* stronger zoom for the hero background image */
     @keyframes hero-bg-zoom {
       0% {
@@ -73,12 +64,6 @@
 <body>
   <main class="hero" aria-label="Homepage hero">
     <audio id="bg-audio" src="Audio/HOPE.mp3" preload="auto" loop aria-hidden="true"></audio>
-    <img
-      src="Logo/Blacktransparent.png"
-      alt="begin again logo"
-      class="hero-logo"
-      aria-hidden="true"
-    />
   </main>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
