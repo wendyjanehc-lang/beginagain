@@ -158,7 +158,8 @@
 
       let globalOffset = 0;
 
-      lines.forEach((line) => {
+      lines.forEach((line, index) => {
+        const isLastLine = index === lines.length - 1;
         const originalText = line.textContent;
         line.textContent = '';
 
@@ -193,13 +194,17 @@
           line.classList.remove('poem-line-hidden');
         }, lineStartVisibleAt * 1000);
 
-        setTimeout(() => {
-          line.classList.remove('poem-line-visible');
-          line.classList.add('poem-line-hidden');
-        }, lineFadeOutAt * 1000);
+        if (!isLastLine) {
+          setTimeout(() => {
+            line.classList.remove('poem-line-visible');
+            line.classList.add('poem-line-hidden');
+          }, lineFadeOutAt * 1000);
+        }
 
-        const totalLineSpan = (lineFadeOutAt - lineOffset) + LINE_GAP;
-        globalOffset += totalLineSpan;
+        if (!isLastLine) {
+          const totalLineSpan = (lineFadeOutAt - lineOffset) + LINE_GAP;
+          globalOffset += totalLineSpan;
+        }
       });
     });
   </script>
