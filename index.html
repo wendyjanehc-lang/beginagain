@@ -44,8 +44,8 @@
       max-width: 40rem;
       width: 100%;
       padding: 4rem 3rem;
-      text-align: center; /* center poem lines */
-      position: relative; /* allow a single line to be absolutely centered */
+      text-align: left;
+      position: relative;
     }
 
     .hero-title {
@@ -65,10 +65,28 @@
       margin-bottom: 0.8rem;
     }
 
+    /* specific line positioning to echo reference layout */
     .hero-line-silence {
-      text-align: left;
-      transform: translateX(-18vw); /* push this line further left than the title */
-      margin-top: 1.8rem; /* ensure it's clearly on its own line below the title */
+      margin-left: 3rem;
+      margin-top: 1.6rem;
+    }
+
+    .hero-line-ache {
+      margin-top: 2.4rem;
+    }
+
+    .hero-line-rubble {
+      margin-top: 2.8rem;
+      text-align: center;
+    }
+
+    .hero-line-voice {
+      margin-top: 2.8rem;
+    }
+
+    .hero-line-quote {
+      margin-top: 3rem;
+      text-align: right;
     }
 
     .hero-line.emphasis {
@@ -144,7 +162,13 @@
 <body>
   <main class="hero" aria-label="Homepage hero">
     <h1 class="hero-title"><strong>listen closely</strong></h1>
-    <p class="hero-line hero-line-silence">in the silence</p>
+
+    <p class="hero-line hero-line-silence">in the <strong><em>silence,</em></strong></p>
+    <p class="hero-line hero-line-ache">in the <strong><em>ache that feels <u>endless,</u></em></strong></p>
+    <p class="hero-line hero-line-rubble">in the rubble at your feet you will <strong><em>hear</em></strong> it:</p>
+
+    <p class="hero-line hero-line-voice">a voice like water running through stone, saying</p>
+    <p class="hero-line hero-line-quote">"<strong><em>I am making all things NEW!</em></strong>"</p>
 
     <audio id="bg-audio" src="Audio/HOPE.mp3" preload="auto" loop aria-hidden="true"></audio>
   </main>
