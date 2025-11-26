@@ -81,19 +81,19 @@
       white-space: pre-wrap;
     }
 
-    .poem-word {
+    .poem-char {
       display: inline-block;
       opacity: 0;
-      transform: translateX(-0.25em);
-      animation: word-in 0.4s ease-out forwards;
+      transform: translateX(-0.2em);
+      animation: char-in 0.32s steps(1, end) forwards;
     }
 
-    @keyframes word-in {
-      from {
+    @keyframes char-in {
+      0% {
         opacity: 0;
-        transform: translateX(-0.25em);
+        transform: translateX(-0.2em);
       }
-      to {
+      100% {
         opacity: 1;
         transform: translateX(0);
       }
@@ -133,9 +133,9 @@
         });
       }
 
-      // word-by-word typewriter effect for each poem line
+      // letter-by-letter typewriter effect for each poem line
       const lines = Array.from(document.querySelectorAll('.poem-line'));
-      const WORD_GAP = 0.28; // seconds between words
+      const CHAR_GAP = 0.06; // seconds between characters
       const LINE_GAP = 0.4;  // pause between lines
 
       let globalOffset = 0;
@@ -148,26 +148,23 @@
         typingSpan.className = 'poem-typing';
         line.appendChild(typingSpan);
 
-        const tokens = originalText.split(/(\s+)/); // keep spaces
-        let wordIndex = 0;
+        let charIndex = 0;
         const lineOffset = globalOffset;
 
-        tokens.forEach((token) => {
-          if (/^\s+$/.test(token)) {
-            const space = document.createElement('span');
-            space.textContent = token;
-            typingSpan.appendChild(space);
-          } else if (token.length) {
-            const wordSpan = document.createElement('span');
-            wordSpan.textContent = token;
-            wordSpan.className = 'poem-word';
-            wordSpan.style.animationDelay = (lineOffset + wordIndex * WORD_GAP) + 's';
-            typingSpan.appendChild(wordSpan);
-            wordIndex++;
+        for (const ch of originalText) {
+          if (ch === ' ') {
+            typingSpan.appendChild(document.createTextNode(ch));
+          } else {
+            const charSpan = document.createElement('span');
+            charSpan.textContent = ch;
+            charSpan.className = 'poem-char';
+            charSpan.style.animationDelay = (lineOffset + charIndex * CHAR_GAP) + 's';
+            typingSpan.appendChild(charSpan);
+            charIndex++;
           }
-        });
+        }
 
-        const lineDuration = wordIndex * WORD_GAP + 0.4; // include final ease-out
+        const lineDuration = charIndex * CHAR_GAP + 0.4; // include final ease-out
         globalOffset += lineDuration + LINE_GAP;
       });
     });
