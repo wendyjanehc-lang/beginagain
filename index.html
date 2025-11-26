@@ -41,92 +41,83 @@
     }
 
     .hero {
-      max-width: 40rem;
+      max-width: 46rem;
       width: 100%;
       padding: 4rem 3rem;
-      text-align: center; /* center poem lines */
-      position: relative; /* allow a single line to be absolutely centered */
+      text-align: left;
+      position: relative;
     }
 
-    .hero-title {
+    .poem {
+      color: #ffffff;
+      text-shadow: 0 2px 6px rgba(0, 0, 0, 0.65);
       font-family: "Mix Somn", -apple-system, BlinkMacSystemFont, system-ui, "SF Pro Text", sans-serif;
-      /* all hero text uses the same base size, increased by ~60% from the original */
       font-size: clamp(2.02rem, 5vw, 2.7rem);
       letter-spacing: 0.08em;
-      margin-bottom: 2rem;
-      text-align: left;
-      transform: translateX(-8vw); /* nudge first line further left */
-    }
-
-    .hero-line {
-      font-family: "Mix Somn", -apple-system, BlinkMacSystemFont, system-ui, "SF Pro Text", sans-serif;
-      font-size: clamp(2.02rem, 5vw, 2.7rem);
       line-height: 1.7;
-      margin-bottom: 0.8rem;
     }
 
-    .hero-line-silence {
-      text-align: left;
-      transform: translateX(-18vw); /* push this line further left than the title */
-      margin-top: 1.8rem; /* ensure it's clearly on its own line below the title */
-    }
-
-    .hero-line.emphasis {
-      font-weight: 600;
-    }
-
-    .hero-signature {
-      font-family: "Mix Somn", -apple-system, BlinkMacSystemFont, system-ui, "SF Pro Text", sans-serif;
-      font-size: clamp(2.02rem, 5vw, 2.7rem);
-      margin-top: 0.5rem;
-      text-align: left;
-    }
-
-    /* per-letter handwriting-style animation */
-    .hero-title,
-    .hero-line,
-    .hero-signature {
-      /* layout preserved for accessibility; animation is applied to inner spans */
-    }
-
-    .hero-animated {
-      display: inline-block;
-      white-space: pre-wrap;
-    }
-
-    .hero-char {
-      display: inline-block;
+    .poem-line {
+      --base-delay: 0s;
       opacity: 0;
-      /* typewriter-like: characters pop in discretely rather than easing */
-      animation: letter-in 0.48s steps(1, end) forwards;
-      animation-delay: calc(var(--line-offset, 0s) + var(--char-index, 0) * 0.072s);
+      transform: translateY(24px) scale(0.98);
+      margin-bottom: 0.6rem;
+      animation-name: line-in, float;
+      animation-duration: 1.4s, 11s;
+      animation-timing-function: cubic-bezier(0.19, 1, 0.22, 1), ease-in-out;
+      animation-fill-mode: forwards, both;
+      animation-iteration-count: 1, infinite;
+      animation-delay: var(--base-delay), calc(var(--base-delay) + 1.4s);
     }
 
-    @keyframes letter-in {
+    .poem-line:nth-child(1) {
+      --base-delay: 0s;
+    }
+
+    .poem-line:nth-child(2) {
+      --base-delay: 1.2s;
+    }
+
+    .poem-line:nth-child(3) {
+      --base-delay: 2.6s;
+    }
+
+    .poem-line:nth-child(4) {
+      --base-delay: 4.2s;
+    }
+
+    .poem-line:nth-child(5) {
+      --base-delay: 6s;
+    }
+
+    .poem-line-indent {
+      padding-left: 6ch;
+    }
+
+    .poem-line-emphasis {
+      letter-spacing: 0.12em;
+    }
+
+    @keyframes line-in {
       0% {
         opacity: 0;
+        transform: translateY(32px) scale(0.96);
       }
       100% {
         opacity: 1;
+        transform: translateY(0) scale(1);
       }
     }
 
-    /* blinking caret for typewriter effect */
-    .hero-caret {
-      display: inline-block;
-      width: 0.08em;
-      margin-left: 0.05em;
-      border-right: 0.12em solid #111827;
-      animation: caret-blink 0.8s steps(1, start) infinite;
-      vertical-align: baseline;
-    }
-
-    @keyframes caret-blink {
-      0%, 50% {
-        opacity: 1;
+    @keyframes float {
+      0% {
+        transform: translateY(0);
       }
-      50.01%, 100% {
-        opacity: 0;
+      50% {
+        transform: translateY(-12px);
+      }
+      100% {
+        transform: translateY(0);
       }
     }
 
@@ -143,56 +134,18 @@
 </head>
 <body>
   <main class="hero" aria-label="Homepage hero">
-    <h1 class="hero-title"><strong>listen closely</strong></h1>
+    <section class="poem" aria-label="A promise of renewal">
+      <p class="poem-line">in the silence,</p>
+      <p class="poem-line">in the ache that feels endless,</p>
+      <p class="poem-line poem-line-indent">in the rubble at your feet you will hear it:</p>
+      <p class="poem-line">a voice like water running through stone, saying</p>
+      <p class="poem-line poem-line-emphasis">"I am making all things NEW!"</p>
+    </section>
 
     <audio id="bg-audio" src="Audio/HOPE.mp3" preload="auto" loop aria-hidden="true"></audio>
   </main>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      const lines = Array.from(
-        document.querySelectorAll('.hero-title, .hero-line, .hero-signature')
-      );
-
-      const PER_CHAR_DELAY = 0.072; // seconds, must match CSS
-      const ANIM_DURATION = 0.48;   // seconds, must match CSS
-      const LINE_GAP = 0.2;         // extra pause between lines
-
-      let cumulativeOffset = 0;
-
-      lines.forEach((el) => {
-        const originalNodes = Array.from(el.childNodes);
-        el.textContent = '';
-        el.classList.add('hero-animated');
-
-        let charIndex = 0;
-        const lineOffset = cumulativeOffset;
-
-        const processNode = (node, parent) => {
-          if (node.nodeType === Node.TEXT_NODE) {
-            for (const char of node.textContent) {
-              const span = document.createElement('span');
-              span.textContent = char;
-              span.className = 'hero-char';
-              span.style.setProperty('--char-index', charIndex);
-              span.style.setProperty('--line-offset', lineOffset + 's');
-              parent.appendChild(span);
-              charIndex++;
-            }
-          } else if (node.nodeType === Node.ELEMENT_NODE) {
-            const clone = node.cloneNode(false); // preserve strong/em/u etc.
-            parent.appendChild(clone);
-            node.childNodes.forEach(child => processNode(child, clone));
-          }
-        };
-
-        originalNodes.forEach(node => processNode(node, el));
-
-        const lastCharIndex = Math.max(charIndex - 1, 0);
-        const lineEndTime = lineOffset + lastCharIndex * PER_CHAR_DELAY + ANIM_DURATION;
-        cumulativeOffset = lineEndTime + LINE_GAP;
-      });
-
-      // attempt to autoplay looping background audio
       const audio = document.getElementById('bg-audio');
       if (audio) {
         audio.loop = true;
@@ -200,15 +153,6 @@
           // autoplay likely blocked by the browser; user will hear audio only after
           // they interact with the page or use built-in browser controls.
         });
-      }
-
-      // add a single blinking caret at the end of the final line
-      const lastLine = lines[lines.length - 1];
-      if (lastLine) {
-        const caret = document.createElement('span');
-        caret.className = 'hero-caret';
-        caret.setAttribute('aria-hidden', 'true');
-        lastLine.appendChild(caret);
       }
     });
   </script>
