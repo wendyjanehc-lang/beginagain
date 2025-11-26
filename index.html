@@ -22,12 +22,22 @@
       padding-top: 6vh; /* closer to top edge */
       font-family: "Mix Somn", -apple-system, BlinkMacSystemFont, system-ui, "SF Pro Text", sans-serif;
       background-color: #fff8e7; /* cream fallback */
+      color: #ffffff;
+      position: relative;
+      overflow: hidden; /* hide zoomed edges */
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
       background-image: url('Images/background.JPG');
-      background-size: 100%;
+      background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
-      color: #ffffff;
-      animation: hero-bg-zoom 45s ease-in-out infinite alternate;
+      z-index: -1;
+      transform-origin: center;
+      animation: hero-bg-zoom 30s ease-in-out infinite alternate;
     }
 
     .hero {
@@ -117,12 +127,10 @@
     /* subtle zoom for the hero background image */
     @keyframes hero-bg-zoom {
       0% {
-        background-position: center;
-        background-size: 100%;
+        transform: scale(1);
       }
       100% {
-        background-position: center;
-        background-size: 105%;
+        transform: scale(1.08);
       }
     }
   </style>
