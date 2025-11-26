@@ -31,14 +31,15 @@
 
     .hero-title {
       font-family: "Homemade Apple", cursive;
-      font-size: clamp(2.4rem, 6vw, 3.2rem);
+      /* all hero text uses the same base size, increased by ~20% */
+      font-size: clamp(1.44rem, 3.6vw, 1.92rem);
       letter-spacing: 0.08em;
       margin-bottom: 2rem;
     }
 
     .hero-line {
-      font-family: "Mix Somn", -apple-system, BlinkMacSystemFont, system-ui, "SF Pro Text", sans-serif;
-      font-size: clamp(1.2rem, 3vw, 1.6rem);
+      font-family: "Homemade Apple", cursive;
+      font-size: clamp(1.44rem, 3.6vw, 1.92rem);
       line-height: 1.7;
       margin-bottom: 0.8rem;
     }
@@ -49,7 +50,7 @@
 
     .hero-signature {
       font-family: "Homemade Apple", cursive;
-      font-size: 1.4rem;
+      font-size: clamp(1.44rem, 3.6vw, 1.92rem);
       margin-top: 2.5rem;
     }
 
@@ -68,19 +69,36 @@
     .hero-char {
       display: inline-block;
       opacity: 0;
-      transform: translateY(0.35em);
-      animation: letter-in 0.4s ease forwards;
-      animation-delay: calc(var(--line-offset, 0s) + var(--char-index, 0) * 0.06s);
+      /* typewriter-like: characters pop in discretely rather than easing */
+      animation: letter-in 0.48s steps(1, end) forwards;
+      animation-delay: calc(var(--line-offset, 0s) + var(--char-index, 0) * 0.072s);
     }
 
     @keyframes letter-in {
       0% {
         opacity: 0;
-        transform: translateY(0.35em);
       }
       100% {
         opacity: 1;
-        transform: translateY(0);
+      }
+    }
+
+    /* blinking caret for typewriter effect */
+    .hero-caret {
+      display: inline-block;
+      width: 0.08em;
+      margin-left: 0.05em;
+      border-right: 0.12em solid #111827;
+      animation: caret-blink 0.8s steps(1, start) infinite;
+      vertical-align: baseline;
+    }
+
+    @keyframes caret-blink {
+      0%, 50% {
+        opacity: 1;
+      }
+      50.01%, 100% {
+        opacity: 0;
       }
     }
   </style>
@@ -116,11 +134,21 @@
           span.textContent = char;
           span.className = 'hero-char';
           span.style.setProperty('--char-index', charIndex);
-          span.style.setProperty('--line-offset', (lineIndex * 0.6) + 's');
+          // slightly slower stagger per line for a more deliberate typewriter feel (~20% slower)
+          span.style.setProperty('--line-offset', (lineIndex * 0.72) + 's');
           el.appendChild(span);
           charIndex++;
         }
       });
+
+      // add a single blinking caret at the end of the final line
+      const lastLine = lines[lines.length - 1];
+      if (lastLine) {
+        const caret = document.createElement('span');
+        caret.className = 'hero-caret';
+        caret.setAttribute('aria-hidden', 'true');
+        lastLine.appendChild(caret);
+      }
     });
   </script>
 </body>
