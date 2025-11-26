@@ -23,10 +23,11 @@
       font-family: "Mix Somn", -apple-system, BlinkMacSystemFont, system-ui, "SF Pro Text", sans-serif;
       background-color: #fff8e7; /* cream fallback */
       background-image: url('Images/background.JPG');
-      background-size: cover;
-      background-position: center;
+      background-size: 110%;
+      background-position: 50% 0%;
       background-repeat: no-repeat;
       color: #ffffff;
+      animation: hero-bg-pan 40s ease-in-out infinite alternate;
     }
 
     .hero {
@@ -107,6 +108,22 @@
       }
       50.01%, 100% {
         opacity: 0;
+      }
+    }
+
+    /* subtle vertical pan/zoom for the hero background image */
+    @keyframes hero-bg-pan {
+      0% {
+        background-position: 50% 0%;
+        background-size: 110%;
+      }
+      50% {
+        background-position: 50% 20%;
+        background-size: 115%;
+      }
+      100% {
+        background-position: 50% 10%;
+        background-size: 112%;
       }
     }
   </style>
