@@ -65,6 +65,12 @@
       margin-bottom: 0.8rem;
     }
 
+    .hero-line-silence {
+      text-align: left;
+      transform: translateX(-18vw); /* push this line further left than the title */
+      margin-top: 0.5rem;
+    }
+
     .hero-line.emphasis {
       font-weight: 600;
     }
@@ -138,6 +144,7 @@
 <body>
   <main class="hero" aria-label="Homepage hero">
     <h1 class="hero-title"><strong>listen closely</strong></h1>
+    <p class="hero-line hero-line-silence">in the silence</p>
 
     <audio id="bg-audio" src="Audio/HOPE.mp3" preload="auto" loop aria-hidden="true"></audio>
   </main>
