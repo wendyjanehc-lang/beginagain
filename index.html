@@ -48,15 +48,6 @@
       transform: translateX(-8vw); /* nudge first line further left */
     }
 
-    .hero-line-rubble {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%);
-      width: max-content;
-      text-align: center;
-    }
-
     .hero-line {
       font-family: "Mix Somn", -apple-system, BlinkMacSystemFont, system-ui, "SF Pro Text", sans-serif;
       font-size: clamp(2.02rem, 5vw, 2.7rem);
@@ -143,15 +134,6 @@
 <body>
   <main class="hero" aria-label="Homepage hero">
     <h1 class="hero-title"><strong>listen closely</strong></h1>
-
-    <p class="hero-line">in the <strong><em>silence,</em></strong></p>
-    <p class="hero-line">in the <strong><em>ache that feels <u>endless,</u></em></strong></p>
-    <p class="hero-line hero-line-rubble">in the rubble at your feet you will <strong><em>hear</em></strong> it:</p>
-
-    <p class="hero-line">a voice like water</p>
-    <p class="hero-line">running through stone,</p>
-
-    <p class="hero-line">saying, "<strong><em>I am making all things NEW!</em></strong>"</p>
 
     <audio id="bg-audio" src="Audio/HOPE.mp3" preload="auto" loop aria-hidden="true"></audio>
   </main>
