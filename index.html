@@ -61,6 +61,23 @@
       text-align: left;
     }
 
+    .audio-toggle {
+      margin-top: 2rem;
+      padding: 0.6rem 1.2rem;
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      border-radius: 999px;
+      background: rgba(0, 0, 0, 0.3);
+      color: #ffffff;
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .audio-toggle:hover,
+    .audio-toggle:focus-visible {
+      background: rgba(0, 0, 0, 0.5);
+      outline: none;
+    }
+
     /* per-letter handwriting-style animation */
     .hero-title,
     .hero-line,
@@ -122,6 +139,9 @@
     <p class="hero-line">running through stone,</p>
 
     <p class="hero-line">saying, "<strong><em>I am making all things NEW!</em></strong>"</p>
+
+    <button class="audio-toggle" type="button">Play audio as you read</button>
+    <audio id="bg-audio" src="Audio/HOPE.mp3" preload="auto"></audio>
   </main>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
@@ -167,6 +187,32 @@
         const lineEndTime = lineOffset + lastCharIndex * PER_CHAR_DELAY + ANIM_DURATION;
         cumulativeOffset = lineEndTime + LINE_GAP;
       });
+
+      // simple play/pause toggle for background audio
+      const audio = document.getElementById('bg-audio');
+      const audioButton = document.querySelector('.audio-toggle');
+      if (audio && audioButton) {
+        let isPlaying = false;
+        const updateLabel = () => {
+          audioButton.textContent = isPlaying ? 'Pause audio' : 'Play audio as you read';
+        };
+        updateLabel();
+
+        audioButton.addEventListener('click', () => {
+          if (!isPlaying) {
+            audio.play().then(() => {
+              isPlaying = true;
+              updateLabel();
+            }).catch(() => {
+              // autoplay or other error; keep button label as play
+            });
+          } else {
+            audio.pause();
+            isPlaying = false;
+            updateLabel();
+          }
+        });
+      }
 
       // add a single blinking caret at the end of the final line
       const lastLine = lines[lines.length - 1];
