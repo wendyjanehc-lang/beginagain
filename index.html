@@ -25,8 +25,10 @@
     }
 
     .hero {
-      text-align: center;
-      padding: 3rem 1.5rem;
+      max-width: 40rem;
+      width: 100%;
+      padding: 4rem 3rem;
+      text-align: left;
     }
 
     .hero-title {
@@ -52,7 +54,7 @@
       font-family: "Mix Somn", -apple-system, BlinkMacSystemFont, system-ui, "SF Pro Text", sans-serif;
       font-size: clamp(2.02rem, 5vw, 2.7rem);
       margin-top: 2.5rem;
-      text-align: center;
+      text-align: left;
     }
 
     /* per-letter handwriting-style animation */
@@ -106,17 +108,16 @@
 </head>
 <body>
   <main class="hero" aria-label="Homepage hero">
-    <h1 class="hero-title">listen closely</h1>
+    <h1 class="hero-title"><strong>listen closely</strong></h1>
 
-    <p class="hero-line">in the silence,</p>
-    <p class="hero-line">in the ache that feels endless,</p>
-    <p class="hero-line">in the rubble at your feet</p>
-    <p class="hero-line">you will hear it:</p>
+    <p class="hero-line">in the <strong><em>silence,</em></strong></p>
+    <p class="hero-line">in the <strong><em>ache that feels <u>endless,</u></em></strong></p>
+    <p class="hero-line">in the rubble at your feet you will <strong><em>hear</em></strong> it:</p>
 
     <p class="hero-line">a voice like water</p>
     <p class="hero-line">running through stone,</p>
 
-    <p class="hero-line emphasis">saying, &quot;I am making all things NEW!&quot;</p>
+    <p class="hero-line">saying, "<strong><em>I am making all things NEW!</em></strong>"</p>
 
     <p class="hero-signature">j</p>
   </main>
@@ -125,21 +126,32 @@
       const lines = document.querySelectorAll('.hero-title, .hero-line, .hero-signature');
 
       lines.forEach((el, lineIndex) => {
-        const text = el.textContent;
+        const originalNodes = Array.from(el.childNodes);
         el.textContent = '';
         el.classList.add('hero-animated');
 
         let charIndex = 0;
-        for (const char of text) {
-          const span = document.createElement('span');
-          span.textContent = char;
-          span.className = 'hero-char';
-          span.style.setProperty('--char-index', charIndex);
-          // slightly slower stagger per line for a more deliberate typewriter feel (~20% slower)
-          span.style.setProperty('--line-offset', (lineIndex * 0.72) + 's');
-          el.appendChild(span);
-          charIndex++;
-        }
+
+        const processNode = (node, parent) => {
+          if (node.nodeType === Node.TEXT_NODE) {
+            for (const char of node.textContent) {
+              const span = document.createElement('span');
+              span.textContent = char;
+              span.className = 'hero-char';
+              span.style.setProperty('--char-index', charIndex);
+              // slightly slower stagger per line for a more deliberate typewriter feel (~20% slower)
+              span.style.setProperty('--line-offset', (lineIndex * 0.72) + 's');
+              parent.appendChild(span);
+              charIndex++;
+            }
+          } else if (node.nodeType === Node.ELEMENT_NODE) {
+            const clone = node.cloneNode(false); // preserve strong/em/u etc.
+            parent.appendChild(clone);
+            node.childNodes.forEach(child => processNode(child, clone));
+          }
+        };
+
+        originalNodes.forEach(node => processNode(node, el));
       });
 
       // add a single blinking caret at the end of the final line
