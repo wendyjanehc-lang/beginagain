@@ -48,75 +48,6 @@
       position: relative;
     }
 
-    .poem {
-      color: #ffffff;
-      font-family: "Mix Somn", -apple-system, BlinkMacSystemFont, system-ui, "SF Pro Text", sans-serif;
-      font-size: clamp(2.02rem, 5vw, 2.7rem);
-      letter-spacing: 0.08em;
-      line-height: 1.7;
-      position: relative;
-      min-height: 1.7em; /* ensures space for one line of text */
-    }
-
-    .poem-line {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      margin: 0;
-      opacity: 0;
-    }
-
-    .poem-line-indent-small {
-      padding-left: 3ch;
-    }
-
-    .poem-line-indent-medium {
-      padding-left: 5ch;
-    }
-
-    .poem-line-indent-large {
-      padding-left: 8ch;
-    }
-
-    .poem-line-emphasis {
-      letter-spacing: 0.12em;
-    }
-
-    .poem-typing {
-      display: inline-block;
-      white-space: pre-wrap;
-    }
-
-.poem-char {
-      display: inline-block;
-      opacity: 0;
-      transform: translateX(-0.2em);
-      animation: char-in 0.32s steps(1, end) forwards;
-      transition: opacity 0.5s ease-out;
-    }
-
-    .poem-line-visible {
-      opacity: 1;
-      transition: opacity 0.8s ease-out;
-    }
-
-    .poem-line-hidden {
-      opacity: 0;
-      transition: opacity 1s ease-in;
-    }
-
-    @keyframes char-in {
-      0% {
-        opacity: 0;
-        transform: translateX(-0.2em);
-      }
-      100% {
-        opacity: 1;
-        transform: translateX(0);
-      }
-    }
-
     /* stronger zoom for the hero background image */
     @keyframes hero-bg-zoom {
       0% {
@@ -130,13 +61,6 @@
 </head>
 <body>
   <main class="hero" aria-label="Homepage hero">
-    <section class="poem" aria-label="A promise of renewal">
-      <p class="poem-line">listen closely, in the silence, in the ache that feels endless,</p>
-      <p class="poem-line poem-line-indent-large">in the rubble at your feet you will hear it hear it:</p>
-      <p class="poem-line poem-line-indent-medium">a voice like water running through stone, saying...</p>
-      <p class="poem-line poem-line-emphasis">"I'm making all things NEW"</p>
-    </section>
-
     <audio id="bg-audio" src="Audio/HOPE.mp3" preload="auto" loop aria-hidden="true"></audio>
   </main>
   <script>
@@ -149,74 +73,6 @@
           // they interact with the page or use built-in browser controls.
         });
       }
-
-      // letter-by-letter typewriter effect for each poem line,
-      // where each line appears, stays briefly, then fades out
-      const lines = Array.from(document.querySelectorAll('.poem-line'));
-      const CHAR_GAP = 0.06; // seconds between characters
-      const HOLD_TIME = 1.5; // seconds each full line stays visible
-      const LINE_GAP = 0.6;  // pause between lines after fade-out
-
-      let globalOffset = 0;
-
-      lines.forEach((line, index) => {
-        const isLastLine = index === lines.length - 1;
-        const originalText = line.textContent;
-        line.textContent = '';
-
-        const typingSpan = document.createElement('span');
-        typingSpan.className = 'poem-typing';
-        line.appendChild(typingSpan);
-
-        let charIndex = 0;
-        const lineOffset = globalOffset;
-
-        for (const ch of originalText) {
-          if (ch === ' ') {
-            typingSpan.appendChild(document.createTextNode(ch));
-          } else {
-            const charSpan = document.createElement('span');
-            charSpan.textContent = ch;
-            charSpan.className = 'poem-char';
-
-            const charStart = lineOffset + charIndex * CHAR_GAP;
-            charSpan.style.animationDelay = charStart + 's';
-            typingSpan.appendChild(charSpan);
-
-            if (!isLastLine) {
-              const fadeStart = (charStart + HOLD_TIME) * 1000; // 1.5s after this letter starts
-              setTimeout(() => {
-                charSpan.style.opacity = '0';
-              }, fadeStart);
-            }
-
-            charIndex++;
-          }
-        }
-
-        const typingDuration = charIndex * CHAR_GAP + 0.4; // until last char lands
-        const lineStartVisibleAt = lineOffset; // when first char begins
-        const lineFullyVisibleAt = lineOffset + typingDuration;
-        const lineFadeOutAt = lineFullyVisibleAt + HOLD_TIME;
-
-        // schedule visibility toggles for this line
-        setTimeout(() => {
-          line.classList.add('poem-line-visible');
-          line.classList.remove('poem-line-hidden');
-        }, lineStartVisibleAt * 1000);
-
-        if (!isLastLine) {
-          setTimeout(() => {
-            line.classList.remove('poem-line-visible');
-            line.classList.add('poem-line-hidden');
-          }, lineFadeOutAt * 1000);
-        }
-
-        if (!isLastLine) {
-          const totalLineSpan = (lineFadeOutAt - lineOffset) + LINE_GAP;
-          globalOffset += totalLineSpan;
-        }
-      });
     });
   </script>
 </body>
