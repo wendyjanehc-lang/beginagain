@@ -57,36 +57,7 @@
     }
 
     .poem-line {
-      --base-delay: 0s;
-      opacity: 0;
-      transform: translateY(24px) scale(0.98);
       margin-bottom: 0.6rem;
-      animation-name: line-in, float;
-      animation-duration: 1.4s, 11s;
-      animation-timing-function: cubic-bezier(0.19, 1, 0.22, 1), ease-in-out;
-      animation-fill-mode: forwards, both;
-      animation-iteration-count: 1, infinite;
-      animation-delay: var(--base-delay), calc(var(--base-delay) + 1.4s);
-    }
-
-    .poem-line:nth-child(1) {
-      --base-delay: 0s;
-    }
-
-    .poem-line:nth-child(2) {
-      --base-delay: 1.2s;
-    }
-
-    .poem-line:nth-child(3) {
-      --base-delay: 2.6s;
-    }
-
-    .poem-line:nth-child(4) {
-      --base-delay: 4.2s;
-    }
-
-    .poem-line:nth-child(5) {
-      --base-delay: 6s;
     }
 
     .poem-line-indent {
@@ -97,26 +68,26 @@
       letter-spacing: 0.12em;
     }
 
-    @keyframes line-in {
-      0% {
-        opacity: 0;
-        transform: translateY(32px) scale(0.96);
-      }
-      100% {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-      }
+    .poem-typing {
+      display: inline-block;
+      white-space: pre-wrap;
     }
 
-    @keyframes float {
-      0% {
-        transform: translateY(0);
+    .poem-word {
+      display: inline-block;
+      opacity: 0;
+      transform: translateX(-0.25em);
+      animation: word-in 0.4s ease-out forwards;
+    }
+
+    @keyframes word-in {
+      from {
+        opacity: 0;
+        transform: translateX(-0.25em);
       }
-      50% {
-        transform: translateY(-12px);
-      }
-      100% {
-        transform: translateY(0);
+      to {
+        opacity: 1;
+        transform: translateX(0);
       }
     }
 
@@ -153,6 +124,44 @@
           // they interact with the page or use built-in browser controls.
         });
       }
+
+      // word-by-word typewriter effect for each poem line
+      const lines = Array.from(document.querySelectorAll('.poem-line'));
+      const WORD_GAP = 0.28; // seconds between words
+      const LINE_GAP = 0.4;  // pause between lines
+
+      let globalOffset = 0;
+
+      lines.forEach((line) => {
+        const originalText = line.textContent;
+        line.textContent = '';
+
+        const typingSpan = document.createElement('span');
+        typingSpan.className = 'poem-typing';
+        line.appendChild(typingSpan);
+
+        const tokens = originalText.split(/(\s+)/); // keep spaces
+        let wordIndex = 0;
+        const lineOffset = globalOffset;
+
+        tokens.forEach((token) => {
+          if (/^\s+$/.test(token)) {
+            const space = document.createElement('span');
+            space.textContent = token;
+            typingSpan.appendChild(space);
+          } else if (token.length) {
+            const wordSpan = document.createElement('span');
+            wordSpan.textContent = token;
+            wordSpan.className = 'poem-word';
+            wordSpan.style.animationDelay = (lineOffset + wordIndex * WORD_GAP) + 's';
+            typingSpan.appendChild(wordSpan);
+            wordIndex++;
+          }
+        });
+
+        const lineDuration = wordIndex * WORD_GAP + 0.4; // include final ease-out
+        globalOffset += lineDuration + LINE_GAP;
+      });
     });
   </script>
 </body>
