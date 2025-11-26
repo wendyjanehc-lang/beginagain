@@ -85,7 +85,7 @@
       display: inline-block;
       opacity: 0;
       transform: translateX(-0.2em);
-      animation: char-in 0.32s steps(1, end) forwards;
+      animation: char-in 0.45s steps(1, end) forwards;
     }
 
     @keyframes char-in {
@@ -135,8 +135,10 @@
 
       // letter-by-letter typewriter effect for each poem line
       const lines = Array.from(document.querySelectorAll('.poem-line'));
-      const CHAR_GAP = 0.06; // seconds between characters
-      const LINE_GAP = 0.4;  // pause between lines
+      const BASE_CHAR_GAP = 0.09; // base seconds between characters (slower)
+      const JITTER_RANGE = 0.06;  // how much each step can vary (+/-)
+      const MIN_STEP = 0.03;      // minimum spacing between characters
+      const LINE_GAP = 0.4;       // pause between lines
 
       let globalOffset = 0;
 
@@ -148,8 +150,8 @@
         typingSpan.className = 'poem-typing';
         line.appendChild(typingSpan);
 
-        let charIndex = 0;
         const lineOffset = globalOffset;
+        let currentDelay = lineOffset;
 
         for (const ch of originalText) {
           if (ch === ' ') {
@@ -158,13 +160,17 @@
             const charSpan = document.createElement('span');
             charSpan.textContent = ch;
             charSpan.className = 'poem-char';
-            charSpan.style.animationDelay = (lineOffset + charIndex * CHAR_GAP) + 's';
+
+            const jitter = (Math.random() - 0.5) * JITTER_RANGE;
+            const step = Math.max(BASE_CHAR_GAP + jitter, MIN_STEP);
+            currentDelay += step;
+
+            charSpan.style.animationDelay = currentDelay + 's';
             typingSpan.appendChild(charSpan);
-            charIndex++;
           }
         }
 
-        const lineDuration = charIndex * CHAR_GAP + 0.4; // include final ease-out
+        const lineDuration = (currentDelay - lineOffset) + 0.4; // include final ease-out
         globalOffset += lineDuration + LINE_GAP;
       });
     });
