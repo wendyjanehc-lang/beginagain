@@ -88,11 +88,12 @@
       white-space: pre-wrap;
     }
 
-    .poem-char {
+.poem-char {
       display: inline-block;
       opacity: 0;
       transform: translateX(-0.2em);
       animation: char-in 0.32s steps(1, end) forwards;
+      transition: opacity 0.5s ease-out;
     }
 
     .poem-line-visible {
@@ -177,8 +178,18 @@
             const charSpan = document.createElement('span');
             charSpan.textContent = ch;
             charSpan.className = 'poem-char';
-            charSpan.style.animationDelay = (lineOffset + charIndex * CHAR_GAP) + 's';
+
+            const charStart = lineOffset + charIndex * CHAR_GAP;
+            charSpan.style.animationDelay = charStart + 's';
             typingSpan.appendChild(charSpan);
+
+            if (!isLastLine) {
+              const fadeStart = (charStart + HOLD_TIME) * 1000; // 1.5s after this letter starts
+              setTimeout(() => {
+                charSpan.style.opacity = '0';
+              }, fadeStart);
+            }
+
             charIndex++;
           }
         }
