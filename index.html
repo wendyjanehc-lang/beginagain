@@ -159,14 +159,15 @@
         class="poem-line poem-line--secondary"
         id="listen-text-secondary"
         data-text="in the silence, in the ache that feels endless"
-        data-text-next="a voice like water, running through stone"
+        data-text-second="you will hear it"
+        data-text-third="a voice like water, running through stone"
         data-text-fifth="saying,"
         data-text-sixth="&quot;I am making all things"
       ></span>
       <span
         class="poem-line poem-line--tertiary"
         id="listen-text-tertiary"
-        data-text="in the rubble at your feet you will hear it"
+        data-text="in the rubble at your feet"
       ></span>
     </section>
 
@@ -231,9 +232,10 @@
 
       if (primaryEl) {
         const primaryText = primaryEl.getAttribute('data-text') || '';
-        const secondaryText = secondaryEl?.getAttribute('data-text') || '';
+        const secondaryFirstText = secondaryEl?.getAttribute('data-text') || '';
         const tertiaryText = tertiaryEl?.getAttribute('data-text') || '';
-        const secondaryNextText = secondaryEl?.getAttribute('data-text-next') || '';
+        const secondarySecondText = secondaryEl?.getAttribute('data-text-second') || '';
+        const secondaryThirdText = secondaryEl?.getAttribute('data-text-third') || '';
         const secondaryFifthText = secondaryEl?.getAttribute('data-text-fifth') || '';
         const secondarySixthText = secondaryEl?.getAttribute('data-text-sixth') || '';
 
@@ -246,15 +248,16 @@
               // Fade out the primary line while starting secondary handwriting
               primaryEl.classList.add('poem-line--fade-out');
 
-              if (secondaryEl && secondaryText) {
+              // 2. Secondary (first): in the silence, in the ache that feels endless
+              if (secondaryEl && secondaryFirstText) {
                 setTimeout(() => {
-                  typeText(secondaryEl, secondaryText, {
+                  typeText(secondaryEl, secondaryFirstText, {
                     baseDelay: 86,
                     jitterMax: 70,
                     onComplete: () => {
                       secondaryEl.classList.add('poem-line--fade-out');
 
-                      // 3. Tertiary: in the rubble at your feet you will hear it
+                      // 3. Tertiary: in the rubble at your feet
                       if (tertiaryEl && tertiaryText) {
                         setTimeout(() => {
                           tertiaryEl.classList.remove('poem-line--fade-out');
@@ -266,53 +269,69 @@
                             onComplete: () => {
                               tertiaryEl.classList.add('poem-line--fade-out');
 
-                              // 4. Secondary again: a voice like water, running through stone
-                              if (secondaryEl && secondaryNextText) {
+                              // 4. Secondary (second): you will hear it
+                              if (secondaryEl && secondarySecondText) {
                                 setTimeout(() => {
                                   secondaryEl.classList.remove('poem-line--fade-out');
                                   secondaryEl.style.opacity = '1';
 
-                                  typeText(secondaryEl, secondaryNextText, {
+                                  typeText(secondaryEl, secondarySecondText, {
                                     baseDelay: 90,
                                     jitterMax: 70,
                                     onComplete: () => {
                                       secondaryEl.classList.add('poem-line--fade-out');
 
-                                      // 5. Secondary once more: "saying,"
-                                      if (secondaryEl && secondaryFifthText) {
+                                      // 5. Secondary (third): a voice like water, running through stone
+                                      if (secondaryEl && secondaryThirdText) {
                                         setTimeout(() => {
                                           secondaryEl.classList.remove('poem-line--fade-out');
                                           secondaryEl.style.opacity = '1';
-                                          secondaryEl.classList.add('poem-strong');
 
-                                          typeText(secondaryEl, secondaryFifthText, {
+                                          typeText(secondaryEl, secondaryThirdText, {
                                             baseDelay: 90,
                                             jitterMax: 70,
                                             onComplete: () => {
                                               secondaryEl.classList.add('poem-line--fade-out');
 
-                                              // 6. Secondary final: "I am making all things" (persistent)
-                                              if (secondaryEl && secondarySixthText) {
+                                              // 6. Secondary once more: "saying,"
+                                              if (secondaryEl && secondaryFifthText) {
                                                 setTimeout(() => {
                                                   secondaryEl.classList.remove('poem-line--fade-out');
-                                                  secondaryEl.classList.remove('poem-strong');
-                                                  secondaryEl.classList.add('poem-final-emphasis');
                                                   secondaryEl.style.opacity = '1';
+                                                  secondaryEl.classList.add('poem-strong');
 
-                                                  typeText(secondaryEl, secondarySixthText, {
-                                                    baseDelay: 115, // slower for the final phrase
+                                                  typeText(secondaryEl, secondaryFifthText, {
+                                                    baseDelay: 90,
                                                     jitterMax: 70,
                                                     onComplete: () => {
-                                                      // After the final phrase has written, wrap "all" so we can
-                                                      // place the manic_emphasis underline beneath it.
-                                                      const full = secondaryEl.textContent || "";
-                                                      const target = "all";
-                                                      const idx = full.indexOf(target);
-                                                      if (idx !== -1) {
-                                                        const before = full.slice(0, idx);
-                                                        const after = full.slice(idx + target.length);
-                                                        secondaryEl.innerHTML =
-                                                          before + '<span class="poem-all">' + target + '</span>' + after;
+                                                      secondaryEl.classList.add('poem-line--fade-out');
+
+                                                      // 7. Secondary final: "I am making all things" (persistent)
+                                                      if (secondaryEl && secondarySixthText) {
+                                                        setTimeout(() => {
+                                                          secondaryEl.classList.remove('poem-line--fade-out');
+                                                          secondaryEl.classList.remove('poem-strong');
+                                                          secondaryEl.classList.add('poem-final-emphasis');
+                                                          secondaryEl.style.opacity = '1';
+
+                                                          typeText(secondaryEl, secondarySixthText, {
+                                                            baseDelay: 115, // slower for the final phrase
+                                                            jitterMax: 70,
+                                                            onComplete: () => {
+                                                              // After the final phrase has written, wrap "all" so we can
+                                                              // place the manic_emphasis underline beneath it.
+                                                              const full = secondaryEl.textContent || "";
+                                                              const target = "all";
+                                                              const idx = full.indexOf(target);
+                                                              if (idx !== -1) {
+                                                                const before = full.slice(0, idx);
+                                                                const after = full.slice(idx + target.length);
+                                                                secondaryEl.innerHTML =
+                                                                  before + '<span class="poem-all">' + target + '</span>' + after;
+                                                              }
+                                                            },
+                                                          });
+                                                        }, 700);
                                                       }
                                                     },
                                                   });
