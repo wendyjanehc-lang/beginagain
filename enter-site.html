@@ -25,6 +25,24 @@
         radial-gradient(circle at 15% 15%, rgba(255, 255, 255, 0.16) 0, transparent 45%),
         linear-gradient(145deg, #081426 0%, #1d3d66 32%, #4f7ba0 60%, #d5dde7 78%, #f3e7d4 100%);
       color: #ffffff;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Subtle film/grain overlay on top of the gradient background. */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: -1;
+      opacity: 0.22;
+      mix-blend-mode: soft-light;
+      background-image:
+        radial-gradient(circle, rgba(255, 255, 255, 0.6) 1px, transparent 0),
+        radial-gradient(circle, rgba(0, 0, 0, 0.45) 1px, transparent 0);
+      background-size: 3px 3px, 5px 5px;
+      background-position: 0 0, 1px 1px;
     }
 
     main {
