@@ -138,6 +138,7 @@
         data-text="in the silence, in the ache that feels endless"
         data-text-next="a voice like water, running through stone"
         data-text-fifth="saying,"
+        data-text-sixth="I am making all things"
       ></span>
       <span
         class="poem-line poem-line--tertiary"
@@ -188,6 +189,7 @@
         const tertiaryText = tertiaryEl?.getAttribute('data-text') || '';
         const secondaryNextText = secondaryEl?.getAttribute('data-text-next') || '';
         const secondaryFifthText = secondaryEl?.getAttribute('data-text-fifth') || '';
+        const secondarySixthText = secondaryEl?.getAttribute('data-text-sixth') || '';
 
         // Start primary after a short delay for background/font
         setTimeout(() => {
@@ -242,6 +244,23 @@
                                             jitterMax: 70,
                                             onComplete: () => {
                                               secondaryEl.classList.add('poem-line--fade-out');
+
+                                              // 6. Secondary final: "I am making all things" (persistent)
+                                              if (secondaryEl && secondarySixthText) {
+                                                setTimeout(() => {
+                                                  secondaryEl.classList.remove('poem-line--fade-out');
+                                                  secondaryEl.classList.remove('poem-strong');
+                                                  secondaryEl.style.opacity = '1';
+
+                                                  typeText(secondaryEl, secondarySixthText, {
+                                                    baseDelay: 76,
+                                                    jitterMax: 70,
+                                                    onComplete: () => {
+                                                      // Intentionally do NOT fade this one out
+                                                    },
+                                                  });
+                                                }, 700);
+                                              }
                                             },
                                           });
                                         }, 700);
