@@ -240,7 +240,7 @@
         // Start primary after a short delay for background/font
         setTimeout(() => {
           typeText(primaryEl, primaryText, {
-            baseDelay: 80,
+            baseDelay: 95,
             jitterMax: 80,
             onComplete: () => {
               // Fade out the primary line while starting secondary handwriting
@@ -249,7 +249,7 @@
               if (secondaryEl && secondaryText) {
                 setTimeout(() => {
                   typeText(secondaryEl, secondaryText, {
-                    baseDelay: 72,
+                    baseDelay: 86,
                     jitterMax: 70,
                     onComplete: () => {
                       secondaryEl.classList.add('poem-line--fade-out');
@@ -261,7 +261,7 @@
                           tertiaryEl.style.opacity = '1';
 
                           typeText(tertiaryEl, tertiaryText, {
-                            baseDelay: 76,
+                            baseDelay: 90,
                             jitterMax: 70,
                             onComplete: () => {
                               tertiaryEl.classList.add('poem-line--fade-out');
@@ -273,7 +273,7 @@
                                   secondaryEl.style.opacity = '1';
 
                                   typeText(secondaryEl, secondaryNextText, {
-                                    baseDelay: 76,
+                                    baseDelay: 90,
                                     jitterMax: 70,
                                     onComplete: () => {
                                       secondaryEl.classList.add('poem-line--fade-out');
@@ -286,7 +286,7 @@
                                           secondaryEl.classList.add('poem-strong');
 
                                           typeText(secondaryEl, secondaryFifthText, {
-                                            baseDelay: 76,
+                                            baseDelay: 90,
                                             jitterMax: 70,
                                             onComplete: () => {
                                               secondaryEl.classList.add('poem-line--fade-out');
@@ -300,7 +300,7 @@
                                                   secondaryEl.style.opacity = '1';
 
                                                   typeText(secondaryEl, secondarySixthText, {
-                                                    baseDelay: 95, // slower for the final phrase
+                                                    baseDelay: 115, // slower for the final phrase
                                                     jitterMax: 70,
                                                     onComplete: () => {
                                                       // After the final phrase has written, wrap "all" so we can
