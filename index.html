@@ -186,6 +186,9 @@
                   typeText(secondaryEl, secondaryText, {
                     baseDelay: 80,
                     jitterMax: 70,
+                    onComplete: () => {
+                      secondaryEl.classList.add('poem-line--fade-out');
+                    },
                   });
                 }, 500); // slight offset so fade + new writing overlap a bit
               }
