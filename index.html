@@ -115,25 +115,6 @@
       font-size: 3.1rem; /* ~15% larger for \"I am making all things\" */
     }
 
-    .poem-all {
-      position: relative;
-      display: inline-block;
-    }
-
-    .poem-all::after {
-      content: "";
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      bottom: -0.1em; /* sit just beneath the baseline */
-      width: 8rem;
-      height: 2.4rem;
-      background-image: url('Elements/manic_emphasis-03.png');
-      background-repeat: no-repeat;
-      background-size: 100% 100%;
-      pointer-events: none;
-    }
-
     /* stronger zoom for the hero background image */
     @keyframes hero-bg-zoom {
       0% {
@@ -322,19 +303,9 @@
                                                               // place the manic_emphasis underline beneath it and
                                                               // then append NEW! at the end.
                                                               const full = secondaryEl.textContent || "";
-                                                              const target = "all";
-                                                              const idx = full.indexOf(target);
-                                                              if (idx !== -1) {
-                                                                const before = full.slice(0, idx);
-                                                                const after = full.slice(idx + target.length);
-                                                                secondaryEl.innerHTML =
-                                                                  before + '<span class="poem-all">' + target + '</span>' + after +
-                                                                  ' <span class="poem-strong">NEW!</span>';
-                                                              } else {
-                                                                // Fallback: if "all" isn't found, just append NEW!
-                                                                secondaryEl.innerHTML =
-                                                                  full + ' <span class="poem-strong">NEW!</span>';
-                                                              }
+                                                              // Append NEW! at the end without extra underline element.
+                                                              secondaryEl.innerHTML =
+                                                                full + ' <span class="poem-strong">NEW!</span>';
                                                             },
                                                           });
                                                         }, 700);
