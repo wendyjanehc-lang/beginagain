@@ -6,6 +6,14 @@
   <title>hello</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Homemade+Apple&display=swap" />
   <style>
+    @font-face {
+      font-family: 'Manic';
+      src: url('fonts/MANIC.otf') format('opentype');
+      font-weight: normal;
+      font-style: normal;
+      font-display: swap;
+    }
+
     *,
     *::before,
     *::after {
@@ -20,7 +28,7 @@
       align-items: flex-start; /* place hero toward top */
       justify-content: center; /* center hero column */
       padding-top: 4.8vh; /* ~20% higher (less top padding) */
-      font-family: "Mix Somn", -apple-system, BlinkMacSystemFont, system-ui, "SF Pro Text", sans-serif;
+      font-family: "Manic", "Mix Somn", -apple-system, BlinkMacSystemFont, system-ui, "SF Pro Text", sans-serif;
       background-color: #fff8e7; /* cream fallback */
       color: #ffffff;
       position: relative;
@@ -44,8 +52,39 @@
       max-width: 46rem;
       width: 100%;
       padding: 4rem 3rem;
-      text-align: left;
       position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .poem {
+      font-family: 'Manic', inherit;
+      color: #111111;
+      text-align: center;
+      font-size: 1.1rem;
+      line-height: 2.2;
+      letter-spacing: 0.03em;
+    }
+
+    .poem-line {
+      display: block;
+    }
+
+    .poem-line + .poem-line {
+      margin-top: 0.4rem;
+    }
+
+    .poem-line.group-gap {
+      margin-top: 1.4rem;
+    }
+
+    .poem-emphasis {
+      font-size: 1.35rem;
+    }
+
+    .poem-strong {
+      font-weight: 700;
     }
 
     /* stronger zoom for the hero background image */
@@ -63,6 +102,22 @@
 </head>
 <body>
   <main class="hero" aria-label="Homepage hero">
+    <section class="poem" aria-label="Hopeful promise poem">
+      <span class="poem-line poem-emphasis">
+        <span class="poem-strong">LISTEN</span> closely
+      </span>
+
+      <span class="poem-line group-gap">in the silence,</span>
+      <span class="poem-line">in the <span class="poem-strong">ache</span> that feels endless,</span>
+      <span class="poem-line">in the <span class="poem-strong">rubble</span> at your feet</span>
+
+      <span class="poem-line group-gap">you will hear it:</span>
+      <span class="poem-line">a <span class="poem-strong">voice</span> like water</span>
+      <span class="poem-line">running through stone,</span>
+
+      <span class="poem-line group-gap">saying, "<span class="poem-strong">I</span> am making all things <span class="poem-strong">NEW!</span>"</span>
+    </section>
+
     <audio id="bg-audio" src="Audio/HOPE.mp3" preload="auto" loop aria-hidden="true"></audio>
   </main>
   <script>
