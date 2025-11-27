@@ -314,12 +314,13 @@
                                                           secondaryEl.classList.add('poem-final-emphasis');
                                                           secondaryEl.style.opacity = '1';
 
-                                                  typeText(secondaryEl, secondarySixthText, {
+                                                          typeText(secondaryEl, secondarySixthText, {
                                                             baseDelay: 140, // even slower for the final phrase
                                                             jitterMax: 70,
                                                             onComplete: () => {
                                                               // After the final phrase has written, wrap "all" so we can
-                                                              // place the manic_emphasis underline beneath it.
+                                                              // place the manic_emphasis underline beneath it and
+                                                              // then append NEW! at the end.
                                                               const full = secondaryEl.textContent || "";
                                                               const target = "all";
                                                               const idx = full.indexOf(target);
@@ -327,7 +328,12 @@
                                                                 const before = full.slice(0, idx);
                                                                 const after = full.slice(idx + target.length);
                                                                 secondaryEl.innerHTML =
-                                                                  before + '<span class="poem-all">' + target + '</span>' + after;
+                                                                  before + '<span class="poem-all">' + target + '</span>' + after +
+                                                                  ' <span class="poem-strong">NEW!</span>';
+                                                              } else {
+                                                                // Fallback: if "all" isn't found, just append NEW!
+                                                                secondaryEl.innerHTML =
+                                                                  full + ' <span class="poem-strong">NEW!</span>';
                                                               }
                                                             },
                                                           });
