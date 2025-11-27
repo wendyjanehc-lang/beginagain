@@ -115,19 +115,6 @@
       font-size: 3.1rem; /* ~15% larger for \"I am making all things\" */
     }
 
-    .listen-blink {
-      animation: listen-blink 0.4s step-start 5;
-    }
-
-    @keyframes listen-blink {
-      0%, 50% {
-        opacity: 1;
-      }
-      50.01%, 100% {
-        opacity: 0;
-      }
-    }
-
     /* stronger zoom for the hero background image */
     @keyframes hero-bg-zoom {
       0% {
@@ -233,15 +220,14 @@
         const secondaryFifthText = secondaryEl?.getAttribute('data-text-fifth') || '';
         const secondarySixthText = secondaryEl?.getAttribute('data-text-sixth') || '';
 
-        const runMainSequence = () => {
-          // Start primary after a short delay for background/font
-          setTimeout(() => {
-            typeText(primaryEl, primaryText, {
-              baseDelay: 95,
-              jitterMax: 80,
-              onComplete: () => {
-                // Fade out the primary line while starting secondary handwriting
-                primaryEl.classList.add('poem-line--fade-out');
+        // Start primary after a short delay for background/font
+        setTimeout(() => {
+          typeText(primaryEl, primaryText, {
+            baseDelay: 95,
+            jitterMax: 80,
+            onComplete: () => {
+              // Fade out the primary line while starting secondary handwriting
+              primaryEl.classList.add('poem-line--fade-out');
 
               // 2. Secondary (first): in the silence, in the ache that feels endless
               if (secondaryEl && secondaryFirstText) {
@@ -341,16 +327,6 @@
             },
           });
         }, 400);
-        };
-
-        // First, flash LISTEN 5 times, then run the main typing sequence.
-        primaryEl.textContent = 'LISTEN';
-        primaryEl.classList.add('listen-blink');
-        primaryEl.addEventListener('animationend', () => {
-          primaryEl.classList.remove('listen-blink');
-          primaryEl.textContent = '';
-          runMainSequence();
-        }, { once: true });
       }
     });
   </script>
