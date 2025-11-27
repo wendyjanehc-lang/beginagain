@@ -238,8 +238,6 @@
       const tertiaryEl = document.getElementById('listen-text-tertiary');
       const heroCtas = document.getElementById('hero-ctas');
 
-      const HERO_ANIM_SEEN_KEY = 'heroAnimationSeen';
-
       function typeText(el, text, options = {}) {
         const { baseDelay = 90, jitterMax = 80, onComplete } = options;
         let index = 0;
@@ -268,42 +266,14 @@
         const secondaryFifthText = secondaryEl?.getAttribute('data-text-fifth') || '';
         const secondarySixthText = secondaryEl?.getAttribute('data-text-sixth') || '';
 
-        const revealCtas = () => {
-          if (heroCtas) {
-            heroCtas.classList.add('hero-ctas--visible');
-            heroCtas.setAttribute('aria-hidden', 'false');
-          }
-        };
-
-        const showFinalStateWithoutAnimation = () => {
-          // Approximate the end state of the sequence.
-          if (primaryEl) {
-            primaryEl.textContent = '';
-            primaryEl.classList.remove('poem-line--fade-out');
-          }
-          if (tertiaryEl) {
-            tertiaryEl.textContent = '';
-            tertiaryEl.style.opacity = '0';
-            tertiaryEl.classList.remove('poem-line--fade-out');
-          }
-          if (secondaryEl) {
-            secondaryEl.classList.remove('poem-line--fade-out', 'poem-strong');
-            secondaryEl.classList.add('poem-final-emphasis');
-            secondaryEl.style.opacity = '1';
-            secondaryEl.textContent = secondarySixthText || '';
-          }
-          revealCtas();
-        };
-
-        const runFullAnimation = () => {
-          // Start primary after a short delay for background/font
-          setTimeout(() => {
-            typeText(primaryEl, primaryText, {
-              baseDelay: 95,
-              jitterMax: 80,
-              onComplete: () => {
-                // Fade out the primary line while starting secondary handwriting
-                primaryEl.classList.add('poem-line--fade-out');
+        // Start primary after a short delay for background/font
+        setTimeout(() => {
+          typeText(primaryEl, primaryText, {
+            baseDelay: 95,
+            jitterMax: 80,
+            onComplete: () => {
+              // Fade out the primary line while starting secondary handwriting
+              primaryEl.classList.add('poem-line--fade-out');
 
               // 2. Secondary (first): in the silence, in the ache that feels endless
               if (secondaryEl && secondaryFirstText) {
@@ -376,11 +346,9 @@
                                                             jitterMax: 70,
                                                             onComplete: () => {
                                                               // Leave the final phrase as-typed, then reveal CTAs.
-                                                              revealCtas();
-                                                              try {
-                                                                window.localStorage.setItem(HERO_ANIM_SEEN_KEY, 'true');
-                                                              } catch (e) {
-                                                                // Ignore storage errors (private mode, etc.).
+                                                              if (heroCtas) {
+                                                                heroCtas.classList.add('hero-ctas--visible');
+                                                                heroCtas.setAttribute('aria-hidden', 'false');
                                                               }
                                                             },
                                                           });
@@ -409,22 +377,6 @@
             },
           });
         }, 400);
-        };
-
-        // If the user has already seen the hero animation this session,
-        // jump straight to the final state instead of replaying it.
-        let hasSeen = false;
-        try {
-          hasSeen = window.localStorage.getItem(HERO_ANIM_SEEN_KEY) === 'true';
-        } catch (e) {
-          hasSeen = false;
-        }
-
-        if (hasSeen) {
-          showFinalStateWithoutAnimation();
-        } else {
-          runFullAnimation();
-        }
       }
     });
   </script>
