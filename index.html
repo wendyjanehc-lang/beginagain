@@ -125,6 +125,7 @@
         class="poem-line poem-emphasis"
         id="listen-text-primary"
         data-text="LISTEN closely"
+        data-text-third="in the rubble at your feet you will hear it"
       ></span>
       <span
         class="poem-line poem-line--secondary"
@@ -171,6 +172,7 @@
       if (primaryEl) {
         const primaryText = primaryEl.getAttribute('data-text') || '';
         const secondaryText = secondaryEl?.getAttribute('data-text') || '';
+        const thirdText = primaryEl.getAttribute('data-text-third') || '';
 
         // Start primary after a short delay for background/font
         setTimeout(() => {
@@ -188,6 +190,23 @@
                     jitterMax: 70,
                     onComplete: () => {
                       secondaryEl.classList.add('poem-line--fade-out');
+
+                      if (thirdText) {
+                        // After the second line has begun to fade, reuse the
+                        // primary position for the third phrase.
+                        setTimeout(() => {
+                          primaryEl.classList.remove('poem-line--fade-out');
+                          primaryEl.style.opacity = '1';
+
+                          typeText(primaryEl, thirdText, {
+                            baseDelay: 85,
+                            jitterMax: 70,
+                            onComplete: () => {
+                              primaryEl.classList.add('poem-line--fade-out');
+                            },
+                          });
+                        }, 800);
+                      }
                     },
                   });
                 }, 500); // slight offset so fade + new writing overlap a bit
