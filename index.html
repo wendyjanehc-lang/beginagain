@@ -136,6 +136,7 @@
         id="listen-text-secondary"
         data-text="in the silence, in the ache that feels endless"
         data-text-next="a voice like water, running through stone"
+        data-text-fifth="saying,"
       ></span>
       <span
         class="poem-line poem-line--tertiary"
@@ -185,6 +186,7 @@
         const secondaryText = secondaryEl?.getAttribute('data-text') || '';
         const tertiaryText = tertiaryEl?.getAttribute('data-text') || '';
         const secondaryNextText = secondaryEl?.getAttribute('data-text-next') || '';
+        const secondaryFifthText = secondaryEl?.getAttribute('data-text-fifth') || '';
 
         // Start primary after a short delay for background/font
         setTimeout(() => {
@@ -226,6 +228,22 @@
                                     jitterMax: 70,
                                     onComplete: () => {
                                       secondaryEl.classList.add('poem-line--fade-out');
+
+                                      // 5. Secondary once more: "saying,"
+                                      if (secondaryEl && secondaryFifthText) {
+                                        setTimeout(() => {
+                                          secondaryEl.classList.remove('poem-line--fade-out');
+                                          secondaryEl.style.opacity = '1';
+
+                                          typeText(secondaryEl, secondaryFifthText, {
+                                            baseDelay: 85,
+                                            jitterMax: 70,
+                                            onComplete: () => {
+                                              secondaryEl.classList.add('poem-line--fade-out');
+                                            },
+                                          });
+                                        }, 700);
+                                      }
                                     },
                                   });
                                 }, 700);
