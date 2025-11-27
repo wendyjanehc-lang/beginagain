@@ -299,13 +299,7 @@
                                                             baseDelay: 140, // even slower for the final phrase
                                                             jitterMax: 70,
                                                             onComplete: () => {
-                                                              // After the final phrase has written, wrap "all" so we can
-                                                              // place the manic_emphasis underline beneath it and
-                                                              // then append NEW! at the end.
-                                                              const full = secondaryEl.textContent || "";
-                                                              // Append NEW! at the end without extra underline element.
-                                                              secondaryEl.innerHTML =
-                                                                full + ' <span class="poem-strong">NEW!</span>';
+                                                              // Leave the final phrase as-typed (no NEW appended).
                                                             },
                                                           });
                                                         }, 700);
