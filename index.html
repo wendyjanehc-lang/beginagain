@@ -115,6 +115,25 @@
       font-size: 3.1rem; /* ~15% larger for \"I am making all things\" */
     }
 
+    .poem-all {
+      position: relative;
+      display: inline-block;
+    }
+
+    .poem-all::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: -0.4rem;
+      width: 7rem;
+      height: 1.8rem;
+      background-image: url('Elements/manic_emphasis-03.png');
+      background-repeat: no-repeat;
+      background-size: contain;
+      pointer-events: none;
+    }
+
     /* stronger zoom for the hero background image */
     @keyframes hero-bg-zoom {
       0% {
@@ -284,7 +303,17 @@
                                                     baseDelay: 95, // slower for the final phrase
                                                     jitterMax: 70,
                                                     onComplete: () => {
-                                                      // Intentionally do NOT fade this one out
+                                                      // After the final phrase has written, wrap "all" so we can
+                                                      // place the manic_emphasis underline beneath it.
+                                                      const full = secondaryEl.textContent || "";
+                                                      const target = "all";
+                                                      const idx = full.indexOf(target);
+                                                      if (idx !== -1) {
+                                                        const before = full.slice(0, idx);
+                                                        const after = full.slice(idx + target.length);
+                                                        secondaryEl.innerHTML =
+                                                          before + '<span class="poem-all">' + target + '</span>' + after;
+                                                      }
                                                     },
                                                   });
                                                 }, 700);
