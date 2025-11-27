@@ -75,6 +75,11 @@
       margin-top: 1.2rem;
     }
 
+    .poem-line--tertiary {
+      font-size: 2.3rem; /* match other lines */
+      white-space: nowrap;
+    }
+
     .poem-line--secondary {
       font-size: 2.3rem; /* match .poem-emphasis size */
       white-space: nowrap; /* keep the full phrase on one line */
@@ -125,13 +130,17 @@
         class="poem-line poem-emphasis"
         id="listen-text-primary"
         data-text="LISTEN closely"
-        data-text-third="in the rubble at your feet you will hear it"
       ></span>
       <span
         class="poem-line poem-line--secondary"
         id="listen-text-secondary"
         data-text="in the silence, in the ache that feels endless"
         data-text-next="a voice like water, running through stone"
+      ></span>
+      <span
+        class="poem-line poem-line--tertiary"
+        id="listen-text-tertiary"
+        data-text="in the rubble at your feet you will hear it"
       ></span>
     </section>
 
@@ -150,6 +159,7 @@
 
       const primaryEl = document.getElementById('listen-text-primary');
       const secondaryEl = document.getElementById('listen-text-secondary');
+      const tertiaryEl = document.getElementById('listen-text-tertiary');
 
       function typeText(el, text, options = {}) {
         const { baseDelay = 90, jitterMax = 80, onComplete } = options;
@@ -173,7 +183,7 @@
       if (primaryEl) {
         const primaryText = primaryEl.getAttribute('data-text') || '';
         const secondaryText = secondaryEl?.getAttribute('data-text') || '';
-        const thirdText = primaryEl.getAttribute('data-text-third') || '';
+        const tertiaryText = tertiaryEl?.getAttribute('data-text') || '';
         const secondaryNextText = secondaryEl?.getAttribute('data-text-next') || '';
 
         // Start primary after a short delay for background/font
@@ -193,21 +203,19 @@
                     onComplete: () => {
                       secondaryEl.classList.add('poem-line--fade-out');
 
-                      if (thirdText) {
-                        // After the second line has begun to fade, reuse the
-                        // primary position for the third phrase.
+                      // 3. Tertiary: in the rubble at your feet you will hear it
+                      if (tertiaryEl && tertiaryText) {
                         setTimeout(() => {
-                          primaryEl.classList.remove('poem-line--fade-out');
-                          primaryEl.style.opacity = '1';
+                          tertiaryEl.classList.remove('poem-line--fade-out');
+                          tertiaryEl.style.opacity = '1';
 
-                          typeText(primaryEl, thirdText, {
+                          typeText(tertiaryEl, tertiaryText, {
                             baseDelay: 85,
                             jitterMax: 70,
                             onComplete: () => {
-                              // Fade the third phrase in the primary spot
-                              primaryEl.classList.add('poem-line--fade-out');
+                              tertiaryEl.classList.add('poem-line--fade-out');
 
-                              // Then reuse the secondary spot for the fourth phrase
+                              // 4. Secondary again: a voice like water, running through stone
                               if (secondaryEl && secondaryNextText) {
                                 setTimeout(() => {
                                   secondaryEl.classList.remove('poem-line--fade-out');
