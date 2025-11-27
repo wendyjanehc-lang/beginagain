@@ -72,7 +72,15 @@
     }
 
     .poem-line + .poem-line {
-      margin-top: 0.4rem;
+      margin-top: 1.2rem;
+    }
+
+    .poem-line--secondary {
+      font-size: 1.6rem;
+    }
+
+    .poem-line--fade-out {
+      animation: poem-fade-out 4s ease-out forwards;
     }
 
     .poem-line.group-gap {
@@ -81,6 +89,15 @@
 
     .poem-emphasis {
       font-size: 2.3rem; /* 70% larger than 1.35rem */
+    }
+
+    @keyframes poem-fade-out {
+      0% {
+        opacity: 1;
+      }
+      100% {
+        opacity: 0;
+      }
     }
 
     .poem-strong {
@@ -103,7 +120,16 @@
 <body>
   <main class="hero" aria-label="Homepage hero">
     <section class="poem" aria-label="Listen closely">
-      <span class="poem-line poem-emphasis" id="listen-text" data-text="LISTEN closely"></span>
+      <span
+        class="poem-line poem-emphasis"
+        id="listen-text-primary"
+        data-text="LISTEN closely"
+      ></span>
+      <span
+        class="poem-line poem-line--secondary"
+        id="listen-text-secondary"
+        data-text="in the silence, in the ache that feels endless"
+      ></span>
     </section>
 
     <audio id="bg-audio" src="Audio/HOPE.mp3" preload="auto" loop aria-hidden="true"></audio>
@@ -119,25 +145,52 @@
         });
       }
 
-      const listenEl = document.getElementById('listen-text');
-      if (listenEl) {
-        const fullText = listenEl.getAttribute('data-text') || '';
-        listenEl.textContent = '';
+      const primaryEl = document.getElementById('listen-text-primary');
+      const secondaryEl = document.getElementById('listen-text-secondary');
 
+      function typeText(el, text, options = {}) {
+        const { baseDelay = 90, jitterMax = 80, onComplete } = options;
         let index = 0;
-        const baseDelay = 90; // ms per "stroke"
+        el.textContent = '';
 
         const step = () => {
-          if (index < fullText.length) {
-            listenEl.textContent += fullText.charAt(index);
+          if (index < text.length) {
+            el.textContent += text.charAt(index);
             index += 1;
-            const jitter = Math.random() * 80; // make timing feel hand-written
+            const jitter = Math.random() * jitterMax;
             setTimeout(step, baseDelay + jitter);
+          } else if (typeof onComplete === 'function') {
+            onComplete();
           }
         };
 
-        // Small delay so background + font load before writing
-        setTimeout(step, 400);
+        step();
+      }
+
+      if (primaryEl) {
+        const primaryText = primaryEl.getAttribute('data-text') || '';
+        const secondaryText = secondaryEl?.getAttribute('data-text') || '';
+
+        // Start primary after a short delay for background/font
+        setTimeout(() => {
+          typeText(primaryEl, primaryText, {
+            baseDelay: 90,
+            jitterMax: 80,
+            onComplete: () => {
+              // Fade out the primary line while starting secondary handwriting
+              primaryEl.classList.add('poem-line--fade-out');
+
+              if (secondaryEl && secondaryText) {
+                setTimeout(() => {
+                  typeText(secondaryEl, secondaryText, {
+                    baseDelay: 80,
+                    jitterMax: 70,
+                  });
+                }, 500); // slight offset so fade + new writing overlap a bit
+              }
+            },
+          });
+        }, 400);
       }
     });
   </script>
