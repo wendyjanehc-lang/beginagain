@@ -131,6 +131,7 @@
         class="poem-line poem-line--secondary"
         id="listen-text-secondary"
         data-text="in the silence, in the ache that feels endless"
+        data-text-next="a voice like water, running through stone"
       ></span>
     </section>
 
@@ -173,6 +174,7 @@
         const primaryText = primaryEl.getAttribute('data-text') || '';
         const secondaryText = secondaryEl?.getAttribute('data-text') || '';
         const thirdText = primaryEl.getAttribute('data-text-third') || '';
+        const secondaryNextText = secondaryEl?.getAttribute('data-text-next') || '';
 
         // Start primary after a short delay for background/font
         setTimeout(() => {
@@ -202,7 +204,24 @@
                             baseDelay: 85,
                             jitterMax: 70,
                             onComplete: () => {
+                              // Fade the third phrase in the primary spot
                               primaryEl.classList.add('poem-line--fade-out');
+
+                              // Then reuse the secondary spot for the fourth phrase
+                              if (secondaryEl && secondaryNextText) {
+                                setTimeout(() => {
+                                  secondaryEl.classList.remove('poem-line--fade-out');
+                                  secondaryEl.style.opacity = '1';
+
+                                  typeText(secondaryEl, secondaryNextText, {
+                                    baseDelay: 85,
+                                    jitterMax: 70,
+                                    onComplete: () => {
+                                      secondaryEl.classList.add('poem-line--fade-out');
+                                    },
+                                  });
+                                }, 700);
+                              }
                             },
                           });
                         }, 800);
