@@ -115,20 +115,6 @@
       font-size: 3.1rem; /* ~15% larger for \"I am making all things\" */
     }
 
-    .poem-new-blink {
-      display: inline-block;
-      animation: poem-new-blink 1s step-start infinite;
-    }
-
-    @keyframes poem-new-blink {
-      0%, 50% {
-        opacity: 1;
-      }
-      50.01%, 100% {
-        opacity: 0;
-      }
-    }
-
     /* stronger zoom for the hero background image */
     @keyframes hero-bg-zoom {
       0% {
@@ -313,16 +299,7 @@
                                                             baseDelay: 140, // even slower for the final phrase
                                                             jitterMax: 70,
                                                             onComplete: () => {
-                                                              // After the final phrase is fully typed, wrap NEW in a blinking span.
-                                                              const full = secondaryEl.textContent || "";
-                                                              const target = "NEW";
-                                                              const idx = full.lastIndexOf(target);
-                                                              if (idx !== -1) {
-                                                                const before = full.slice(0, idx);
-                                                                const after = full.slice(idx + target.length);
-                                                                secondaryEl.innerHTML =
-                                                                  before + '<span class="poem-new-blink">' + target + '</span>' + after;
-                                                              }
+                                                              // Leave the final phrase as-typed (no NEW appended).
                                                             },
                                                           });
                                                         }, 700);
