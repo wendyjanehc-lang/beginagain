@@ -45,7 +45,7 @@
       background-repeat: no-repeat;
       z-index: -1;
       transform-origin: center;
-      animation: hero-bg-zoom 15s ease-out forwards; /* ~30% faster than 22s */
+      animation: water-zoom-drift 30s ease-in-out infinite;
     }
 
     .hero {
@@ -110,15 +110,19 @@
       font-weight: 700;
     }
 
-    /* stronger zoom for the hero background image */
-    @keyframes hero-bg-zoom {
+    /* looping zoom + gentle vertical drift to mimic water movement */
+    @keyframes water-zoom-drift {
       0% {
-        transform: scale(1);
+        transform: scale(1.03) translateY(0);
         background-position: center 40%;
       }
+      50% {
+        transform: scale(1.08) translateY(-7px);
+        background-position: center 55%;
+      }
       100% {
-        transform: scale(1.15);
-        background-position: center 80%;
+        transform: scale(1.03) translateY(0);
+        background-position: center 40%;
       }
     }
   </style>
