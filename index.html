@@ -103,9 +103,7 @@
 <body>
   <main class="hero" aria-label="Homepage hero">
     <section class="poem" aria-label="Listen closely">
-      <span class="poem-line poem-emphasis">
-        <span class="poem-strong">LISTEN</span> closely
-      </span>
+      <span class="poem-line poem-emphasis" id="listen-text" data-text="LISTEN closely"></span>
     </section>
 
     <audio id="bg-audio" src="Audio/HOPE.mp3" preload="auto" loop aria-hidden="true"></audio>
@@ -119,6 +117,27 @@
           // autoplay likely blocked by the browser; user will hear audio only after
           // they interact with the page or use built-in browser controls.
         });
+      }
+
+      const listenEl = document.getElementById('listen-text');
+      if (listenEl) {
+        const fullText = listenEl.getAttribute('data-text') || '';
+        listenEl.textContent = '';
+
+        let index = 0;
+        const baseDelay = 90; // ms per "stroke"
+
+        const step = () => {
+          if (index < fullText.length) {
+            listenEl.textContent += fullText.charAt(index);
+            index += 1;
+            const jitter = Math.random() * 80; // make timing feel hand-written
+            setTimeout(step, baseDelay + jitter);
+          }
+        };
+
+        // Small delay so background + font load before writing
+        setTimeout(step, 400);
       }
     });
   </script>
