@@ -112,7 +112,7 @@
     }
 
     .poem-final-emphasis {
-      font-size: 2.7rem; /* slightly larger for \"I am making all things\" */
+      font-size: 3.1rem; /* ~15% larger for \"I am making all things\" */
     }
 
     /* stronger zoom for the hero background image */
@@ -281,7 +281,7 @@
                                                   secondaryEl.style.opacity = '1';
 
                                                   typeText(secondaryEl, secondarySixthText, {
-                                                    baseDelay: 76,
+                                                    baseDelay: 95, // slower for the final phrase
                                                     jitterMax: 70,
                                                     onComplete: () => {
                                                       // Intentionally do NOT fade this one out
