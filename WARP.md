@@ -4,9 +4,11 @@ This file provides guidance to WARP (warp.dev) when working with code in this re
 
 ## Project overview
 
-This repository is a minimal static site consisting of a single HTML entrypoint with inline styles:
+This repository is a minimal static site consisting of a primary HTML entrypoint with inline styles, plus an experimental animated variant:
 
-- `index.html` – root HTML document that defines the entire page markup and CSS.
+- `index.html` – root HTML document that defines the entire page markup, CSS, and animated "LISTEN closely" text sequence that ends with **I am making all things NEW!**.
+- `my-animation/` – holds an alternate entrypoint (`index.html`) and shared styles/assets for iterating on the animation.
+- `Elements/` – contains the `manic_emphasis-03.png` underline graphic used to emphasize the word "all" in the final line.
 - No build tooling, package manager configuration, or test framework is currently defined.
 
 The page is self-contained and uses:
