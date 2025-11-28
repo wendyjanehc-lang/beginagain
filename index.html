@@ -280,12 +280,6 @@
 
       if (primaryEl) {
         const primaryText = primaryEl.getAttribute('data-text') || '';
-        // Split the primary line into "LISTEN closely," and the rest (e.g., " in the silence,").
-        const primaryMainText = 'LISTEN closely,';
-        const primarySilenceText = primaryText.startsWith(primaryMainText)
-          ? primaryText.slice(primaryMainText.length)
-          : '';
-
         const secondaryFirstText = secondaryEl?.getAttribute('data-text') || '';
         const tertiaryText = tertiaryEl?.getAttribute('data-text') || '';
         const secondarySecondText = secondaryEl?.getAttribute('data-text-second') || '';
@@ -297,23 +291,17 @@
 
         // Start primary after a short delay for background/font
         setTimeout(() => {
-          // First, type only "LISTEN closely,".
-          typeText(primaryEl, primaryMainText, {
+          typeText(primaryEl, primaryText, {
             baseDelay: 95,
             jitterMax: 80,
             onComplete: () => {
-              // Pause for 1s, then type " in the silence," while LISTEN fades.
-              setTimeout(() => {
-                if (primarySilenceText) {
-                  primaryEl.classList.add('poem-line--fade-out');
-                  appendText(primaryEl, primarySilenceText, {
-                    baseDelay: 90,
-                    jitterMax: 70,
-                    onComplete: () => {
-                      // 2. Secondary (first): in the ache that feels endless
-                      if (secondaryEl && secondaryFirstText) {
-                        setTimeout(() => {
-                          typeText(secondaryEl, secondaryFirstText, {
+              // Fade out the primary line while starting secondary handwriting
+              primaryEl.classList.add('poem-line--fade-out');
+
+              // 2. Secondary (first): in the silence, in the ache that feels endless
+              if (secondaryEl && secondaryFirstText) {
+                setTimeout(() => {
+                  typeText(secondaryEl, secondaryFirstText, {
                     baseDelay: 86,
                     jitterMax: 70,
                     onComplete: () => {
