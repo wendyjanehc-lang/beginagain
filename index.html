@@ -299,29 +299,31 @@
             baseDelay: 95,
             jitterMax: 80,
             onComplete: () => {
-              // After "LISTEN closely" finishes, type "in the silence," on the same line.
+              // After "LISTEN closely" finishes, fade it, then type "in the silence," on the same line.
               if (primarySilenceText) {
-                appendText(primaryEl, primarySilenceText, {
-                  baseDelay: 95,
-                  jitterMax: 80,
-                  onComplete: () => {
-                    // Fade out the primary line while starting secondary handwriting
-                    primaryEl.classList.add('poem-line--fade-out');
+                primaryEl.classList.add('poem-line--fade-out');
 
-                    // 2. Secondary (first): in the ache that feels endless
-                    if (secondaryEl && secondaryFirstText) {
-                      setTimeout(() => {
-                        typeText(secondaryEl, secondaryFirstText, {
-                          baseDelay: 86,
-                          jitterMax: 70,
-                          onComplete: () => {
-                            secondaryEl.classList.add('poem-line--fade-out');
-                          },
-                        });
-                      }, 0);
-                    }
-                  },
-                });
+                // Start "in the silence," after the fade has begun.
+                setTimeout(() => {
+                  appendText(primaryEl, primarySilenceText, {
+                    baseDelay: 95,
+                    jitterMax: 80,
+                    onComplete: () => {
+                      // 2. Secondary (first): in the ache that feels endless
+                      if (secondaryEl && secondaryFirstText) {
+                        setTimeout(() => {
+                          typeText(secondaryEl, secondaryFirstText, {
+                            baseDelay: 86,
+                            jitterMax: 70,
+                            onComplete: () => {
+                              secondaryEl.classList.add('poem-line--fade-out');
+                            },
+                          });
+                        }, 0);
+                      }
+                    },
+                  });
+                }, 400);
               } else {
                 // Fallback: original behavior
                 primaryEl.classList.add('poem-line--fade-out');
