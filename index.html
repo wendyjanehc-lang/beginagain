@@ -257,6 +257,25 @@
         step();
       }
 
+      // Like typeText, but appends characters to the existing content instead of clearing.
+      function appendText(el, text, options = {}) {
+        const { baseDelay = 90, jitterMax = 80, onComplete } = options;
+        let index = 0;
+
+        const step = () => {
+          if (index < text.length) {
+            el.textContent += text.charAt(index);
+            index += 1;
+            const jitter = Math.random() * jitterMax;
+            setTimeout(step, baseDelay + jitter);
+          } else if (typeof onComplete === 'function') {
+            onComplete();
+          }
+        };
+
+        step();
+      }
+
       if (primaryEl) {
         const primaryText = primaryEl.getAttribute('data-text') || '';
         const secondaryFirstText = secondaryEl?.getAttribute('data-text') || '';
@@ -365,8 +384,8 @@
                                                                       // After BEGIN AGAIN is fully written, wait 2s, then
                                                                       // append " with Nathan Gernetzky" on the same line.
                                                                       setTimeout(() => {
-                                                                        const current = secondaryEl.textContent || '';
-                                                                        typeText(secondaryEl, current + secondaryWithText, {
+                                                                        // Append the suffix without reanimating BEGIN AGAIN.
+                                                                        appendText(secondaryEl, secondaryWithText, {
                                                                           baseDelay: 80,
                                                                           jitterMax: 40,
                                                                           onComplete: () => {
