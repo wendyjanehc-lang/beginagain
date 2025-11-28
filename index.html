@@ -86,6 +86,13 @@
       white-space: nowrap; /* keep the full phrase on one line */
     }
 
+    /* Variant used only for "in the rubble at your feet" to shift it left. */
+    .poem-line--secondary-rubble {
+      display: inline-block;
+      transform: translateX(-60%);
+      text-align: left;
+    }
+
     .poem-line--fade-out {
       animation: poem-fade-out 4s ease-out forwards;
     }
@@ -327,17 +334,20 @@
                     onComplete: () => {
                       secondaryEl.classList.add('poem-line--fade-out');
 
-                      // 3. Tertiary: in the rubble at your feet
-                      if (tertiaryEl && tertiaryText) {
+                      // 3. "in the rubble at your feet" now appears on the secondary line,
+                      // shifted left using .poem-line--secondary-rubble.
+                      if (secondaryEl && tertiaryText) {
                         setTimeout(() => {
-                          tertiaryEl.classList.remove('poem-line--fade-out');
-                          tertiaryEl.style.opacity = '1';
+                          secondaryEl.classList.remove('poem-line--fade-out');
+                          secondaryEl.style.opacity = '1';
+                          secondaryEl.classList.add('poem-line--secondary-rubble');
 
-                          typeText(tertiaryEl, tertiaryText, {
+                          typeText(secondaryEl, tertiaryText, {
                             baseDelay: 90,
                             jitterMax: 70,
                             onComplete: () => {
-                              tertiaryEl.classList.add('poem-line--fade-out');
+                              secondaryEl.classList.remove('poem-line--secondary-rubble');
+                              secondaryEl.classList.add('poem-line--fade-out');
 
                               // 4. Secondary (second): you will hear it
                               if (secondaryEl && secondarySecondText) {
