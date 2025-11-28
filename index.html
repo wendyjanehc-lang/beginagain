@@ -266,6 +266,7 @@
         const secondaryFifthText = secondaryEl?.getAttribute('data-text-fifth') || '';
         const secondarySixthText = secondaryEl?.getAttribute('data-text-sixth') || '';
         const secondaryBeginText = secondaryEl?.getAttribute('data-text-begin') || '';
+        const secondaryWithText = ' with Nathan Gernetzky';
 
         // Start primary after a short delay for background/font
         setTimeout(() => {
@@ -361,10 +362,21 @@
                                                                     baseDelay: 120,
                                                                     jitterMax: 70,
                                                                     onComplete: () => {
-                                                                      if (heroCtas) {
-                                                                        heroCtas.classList.add('hero-ctas--visible');
-                                                                        heroCtas.setAttribute('aria-hidden', 'false');
-                                                                      }
+                                                                      // After BEGIN AGAIN is fully written, wait 2s, then
+                                                                      // append " with Nathan Gernetzky" on the same line.
+                                                                      setTimeout(() => {
+                                                                        const current = secondaryEl.textContent || '';
+                                                                        typeText(secondaryEl, current + secondaryWithText, {
+                                                                          baseDelay: 80,
+                                                                          jitterMax: 40,
+                                                                          onComplete: () => {
+                                                                            if (heroCtas) {
+                                                                              heroCtas.classList.add('hero-ctas--visible');
+                                                                              heroCtas.setAttribute('aria-hidden', 'false');
+                                                                            }
+                                                                          },
+                                                                        });
+                                                                      }, 2000);
                                                                     },
                                                                   });
                                                                 }, 800);
