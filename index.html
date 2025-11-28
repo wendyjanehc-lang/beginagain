@@ -177,8 +177,6 @@
         class="poem-line poem-emphasis"
         id="listen-text-primary"
         data-text="LISTEN closely in the silence,"
-        data-text-main="LISTEN closely"
-        data-text-silence=" in the silence,"
       ></span>
       <span
         class="poem-line poem-line--secondary"
@@ -282,8 +280,6 @@
 
       if (primaryEl) {
         const primaryText = primaryEl.getAttribute('data-text') || '';
-        const primaryMainText = primaryEl.getAttribute('data-text-main') || primaryText;
-        const primarySilenceText = primaryEl.getAttribute('data-text-silence') || '';
         const secondaryFirstText = secondaryEl?.getAttribute('data-text') || '';
         const tertiaryText = tertiaryEl?.getAttribute('data-text') || '';
         const secondarySecondText = secondaryEl?.getAttribute('data-text-second') || '';
@@ -295,49 +291,21 @@
 
         // Start primary after a short delay for background/font
         setTimeout(() => {
-          typeText(primaryEl, primaryMainText, {
+          typeText(primaryEl, primaryText, {
             baseDelay: 95,
             jitterMax: 80,
             onComplete: () => {
-              // After "LISTEN closely" finishes, type "in the silence," on the same line.
-              if (primarySilenceText) {
-                appendText(primaryEl, primarySilenceText, {
-                  baseDelay: 95,
-                  jitterMax: 80,
-                  onComplete: () => {
-                    // Fade out the primary line while starting secondary handwriting
-                    primaryEl.classList.add('poem-line--fade-out');
+              // Fade out the primary line while starting secondary handwriting
+              primaryEl.classList.add('poem-line--fade-out');
 
-                    // 2. Secondary (first): in the ache that feels endless
-                    if (secondaryEl && secondaryFirstText) {
-                      setTimeout(() => {
-                        typeText(secondaryEl, secondaryFirstText, {
-                          baseDelay: 86,
-                          jitterMax: 70,
-                          onComplete: () => {
-                            secondaryEl.classList.add('poem-line--fade-out');
-                          },
-                        });
-                      }, 0);
-                    }
-                  },
-                });
-              } else {
-                // Fallback: original behavior
-                primaryEl.classList.add('poem-line--fade-out');
-
-                if (secondaryEl && secondaryFirstText) {
-                  setTimeout(() => {
-                    typeText(secondaryEl, secondaryFirstText, {
-                      baseDelay: 86,
-                      jitterMax: 70,
-                      onComplete: () => {
-                        secondaryEl.classList.add('poem-line--fade-out');
-                      },
-                    });
-                  }, 0);
-                }
-              }
+              // 2. Secondary (first): in the silence, in the ache that feels endless
+              if (secondaryEl && secondaryFirstText) {
+                setTimeout(() => {
+                  typeText(secondaryEl, secondaryFirstText, {
+                    baseDelay: 86,
+                    jitterMax: 70,
+                    onComplete: () => {
+                      secondaryEl.classList.add('poem-line--fade-out');
 
                       // 3. Tertiary: in the rubble at your feet
                       if (tertiaryEl && tertiaryText) {
