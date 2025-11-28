@@ -117,6 +117,26 @@
       font-size: 3.1rem; /* ~15% larger for \"I am making all things\" */
     }
 
+    .poem-all {
+      position: relative;
+      display: inline-block;
+    }
+
+    .poem-all::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: -0.18em;
+      width: 4.2rem; /* smaller underline version */
+      height: 1.2rem;
+      background-image: url('Elements/manic_emphasis-03.png');
+      background-repeat: no-repeat;
+      background-size: 100% 100%;
+      pointer-events: none;
+      filter: invert(1) brightness(1.4); /* approximate white version of the graphic */
+    }
+
     .hero-ctas {
       margin-top: 2.8rem;
       display: flex;
@@ -368,8 +388,19 @@
                                                             baseDelay: 125, // ~10% faster than 140ms for the final phrase
                                                             jitterMax: 70,
                                                             onComplete: () => {
-                                                              // After the final phrase, fade it out and then write "BEGIN AGAIN"
-                                                              // one line lower (using the tertiary line) before revealing the CTA.
+                                                              // After the final phrase, underline "all" with a small manic_emphasis mark.
+                                                              const full = secondaryEl.textContent || '';
+                                                              const target = 'all';
+                                                              const idx = full.indexOf(target);
+                                                              if (idx !== -1) {
+                                                                const before = full.slice(0, idx);
+                                                                const after = full.slice(idx + target.length);
+                                                                secondaryEl.innerHTML =
+                                                                  before + '<span class="poem-all">' + target + '</span>' + after;
+                                                              }
+
+                                                              // Then fade it out and write "BEGIN AGAIN" one line lower
+                                                              // (using the tertiary line) before revealing the CTA.
                                                               if (tertiaryEl && secondaryBeginText) {
                                                                 secondaryEl.classList.add('poem-line--fade-out');
                                                                 setTimeout(() => {
