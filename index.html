@@ -184,6 +184,7 @@
         data-text-third="a voice like water, running through stone"
         data-text-fifth="saying,"
         data-text-sixth="&quot;I am making all things NEW&quot;"
+        data-text-begin="Begin again"
       ></span>
       <span
         class="poem-line poem-line--tertiary"
@@ -264,6 +265,7 @@
         const secondaryThirdText = secondaryEl?.getAttribute('data-text-third') || '';
         const secondaryFifthText = secondaryEl?.getAttribute('data-text-fifth') || '';
         const secondarySixthText = secondaryEl?.getAttribute('data-text-sixth') || '';
+        const secondaryBeginText = secondaryEl?.getAttribute('data-text-begin') || '';
 
         // Start primary after a short delay for background/font
         setTimeout(() => {
@@ -344,8 +346,30 @@
                                                             baseDelay: 140, // even slower for the final phrase
                                                             jitterMax: 70,
                                                             onComplete: () => {
-                                                              // Leave the final phrase as-typed, then reveal CTAs.
-                                                              if (heroCtas) {
+                                                              // After the final phrase, fade it out and then write "Begin again"
+                                                              // in the same secondary line before revealing the CTA.
+                                                              if (secondaryEl && secondaryBeginText) {
+                                                                secondaryEl.classList.add('poem-line--fade-out');
+                                                                setTimeout(() => {
+                                                                  secondaryEl.classList.remove('poem-line--fade-out');
+                                                                  secondaryEl.style.opacity = '1';
+                                                                  // Use the same emphasis style for the new line.
+                                                                  secondaryEl.classList.add('poem-final-emphasis');
+                                                                  secondaryEl.textContent = '';
+
+                                                                  typeText(secondaryEl, secondaryBeginText, {
+                                                                    baseDelay: 120,
+                                                                    jitterMax: 70,
+                                                                    onComplete: () => {
+                                                                      if (heroCtas) {
+                                                                        heroCtas.classList.add('hero-ctas--visible');
+                                                                        heroCtas.setAttribute('aria-hidden', 'false');
+                                                                      }
+                                                                    },
+                                                                  });
+                                                                }, 800);
+                                                              } else if (heroCtas) {
+                                                                // Fallback: if begin-again text is missing, just show CTA.
                                                                 heroCtas.classList.add('hero-ctas--visible');
                                                                 heroCtas.setAttribute('aria-hidden', 'false');
                                                               }
