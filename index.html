@@ -366,18 +366,21 @@
                                                             baseDelay: 125, // ~10% faster than 140ms for the final phrase
                                                             jitterMax: 70,
                                                             onComplete: () => {
-                                                              // After the final phrase, fade it out and then write "Begin again"
-                                                              // in the same secondary line before revealing the CTA.
-                                                              if (secondaryEl && secondaryBeginText) {
+                                                              // After the final phrase, fade it out and then write "BEGIN AGAIN"
+                                                              // one line lower (using the tertiary line) before revealing the CTA.
+                                                              if (tertiaryEl && secondaryBeginText) {
                                                                 secondaryEl.classList.add('poem-line--fade-out');
                                                                 setTimeout(() => {
                                                                   secondaryEl.classList.remove('poem-line--fade-out');
-                                                                  secondaryEl.style.opacity = '1';
-                                                                  // Use the same emphasis style for the new line.
-                                                                  secondaryEl.classList.add('poem-final-emphasis');
-                                                                  secondaryEl.textContent = '';
+                                                                  secondaryEl.style.opacity = '0';
 
-                                                                  typeText(secondaryEl, secondaryBeginText, {
+                                                                  // Prepare the tertiary line as the final BEGIN AGAIN line.
+                                                                  tertiaryEl.classList.remove('poem-line--fade-out');
+                                                                  tertiaryEl.style.opacity = '1';
+                                                                  tertiaryEl.classList.add('poem-final-emphasis');
+                                                                  tertiaryEl.textContent = '';
+
+                                                                  typeText(tertiaryEl, secondaryBeginText, {
                                                                     baseDelay: 120,
                                                                     jitterMax: 70,
                                                                     onComplete: () => {
@@ -385,7 +388,7 @@
                                                                       // append " with Nathan Gernetzky" on the same line.
                                                                       setTimeout(() => {
                                                                         // Append the suffix without reanimating BEGIN AGAIN.
-                                                                        appendText(secondaryEl, secondaryWithText, {
+                                                                        appendText(tertiaryEl, secondaryWithText, {
                                                                           baseDelay: 80,
                                                                           jitterMax: 40,
                                                                           onComplete: () => {
