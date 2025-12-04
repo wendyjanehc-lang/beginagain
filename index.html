@@ -262,13 +262,12 @@
         window.addEventListener('touchstart', enableAudioOnFirstInteraction, { once: true });
       }
 
-      const primaryEl = document.getElementById('listen-text-primary');
       const secondaryEl = document.getElementById('listen-text-secondary');
       const tertiaryEl = document.getElementById('listen-text-tertiary');
       const heroCtas = document.getElementById('hero-ctas');
 
       function typeText(el, text, options = {}) {
-        const { baseDelay = 90, jitterMax = 80, onComplete } = options;
+        const { baseDelay = 100, jitterMax = 80, onComplete } = options;
         let index = 0;
         el.textContent = '';
 
@@ -288,7 +287,7 @@
 
       // Like typeText, but appends characters to the existing content instead of clearing.
       function appendText(el, text, options = {}) {
-        const { baseDelay = 90, jitterMax = 80, onComplete } = options;
+        const { baseDelay = 90, jitterMax = 60, onComplete } = options;
         let index = 0;
 
         const step = () => {
@@ -305,175 +304,33 @@
         step();
       }
 
-      if (primaryEl) {
-        const primaryText = primaryEl.getAttribute('data-text') || '';
-        const secondaryFirstText = secondaryEl?.getAttribute('data-text') || '';
-        const tertiaryText = tertiaryEl?.getAttribute('data-text') || '';
-        const secondarySecondText = secondaryEl?.getAttribute('data-text-second') || '';
-        const secondaryThirdText = secondaryEl?.getAttribute('data-text-third') || '';
-        const secondaryFifthText = secondaryEl?.getAttribute('data-text-fifth') || '';
-        const secondarySixthText = secondaryEl?.getAttribute('data-text-sixth') || '';
-        const secondaryBeginText = secondaryEl?.getAttribute('data-text-begin') || '';
-        const secondaryWithText = ' with Nathan Gernetzky';
+      // Only play the final BEGIN AGAIN sequence.
+      if (tertiaryEl) {
+        const beginText = secondaryEl?.getAttribute('data-text-begin') || 'BEGIN AGAIN';
+        const withText = ' with Nathan Gernetzky';
 
-        // Start primary after a short delay for background/font
+        tertiaryEl.classList.add('poem-final-emphasis');
+        tertiaryEl.textContent = '';
+
+        // Give the background and font a moment to settle, then type the line.
         setTimeout(() => {
-          typeText(primaryEl, primaryText, {
-            baseDelay: 95,
-            jitterMax: 80,
+          typeText(tertiaryEl, beginText, {
+            baseDelay: 115,
+            jitterMax: 75,
             onComplete: () => {
-              // Fade out the primary line while starting secondary handwriting
-              primaryEl.classList.add('poem-line--fade-out');
-
-              // 2. Secondary (first): in the silence, in the ache that feels endless
-              if (secondaryEl && secondaryFirstText) {
-                setTimeout(() => {
-                  typeText(secondaryEl, secondaryFirstText, {
-                    baseDelay: 86,
-                    jitterMax: 70,
-                    onComplete: () => {
-                      secondaryEl.classList.add('poem-line--fade-out');
-
-                      // 3. "in the rubble at your feet" now appears on the secondary line,
-                      // shifted left using .poem-line--secondary-rubble.
-                      if (secondaryEl && tertiaryText) {
-                        setTimeout(() => {
-                          secondaryEl.classList.remove('poem-line--fade-out');
-                          secondaryEl.style.opacity = '1';
-                          secondaryEl.classList.add('poem-line--secondary-rubble');
-
-                          typeText(secondaryEl, tertiaryText, {
-                            baseDelay: 90,
-                            jitterMax: 70,
-                            onComplete: () => {
-                              secondaryEl.classList.remove('poem-line--secondary-rubble');
-                              secondaryEl.classList.add('poem-line--fade-out');
-
-                              // 4. Secondary (second): you will hear it
-                              if (secondaryEl && secondarySecondText) {
-                                setTimeout(() => {
-                                  secondaryEl.classList.remove('poem-line--fade-out');
-                                  secondaryEl.style.opacity = '1';
-
-                                  typeText(secondaryEl, secondarySecondText, {
-                                    baseDelay: 90,
-                                    jitterMax: 70,
-                                    onComplete: () => {
-                                      secondaryEl.classList.add('poem-line--fade-out');
-
-                                      // 5. Secondary (third): a voice like water, running through stone
-                                      if (secondaryEl && secondaryThirdText) {
-                                        setTimeout(() => {
-                                          secondaryEl.classList.remove('poem-line--fade-out');
-                                          secondaryEl.style.opacity = '1';
-
-                                          typeText(secondaryEl, secondaryThirdText, {
-                                            baseDelay: 90,
-                                            jitterMax: 70,
-                                            onComplete: () => {
-                                              secondaryEl.classList.add('poem-line--fade-out');
-
-                                              // 6. Secondary once more: "saying,"
-                                              if (secondaryEl && secondaryFifthText) {
-                                                setTimeout(() => {
-                                                  secondaryEl.classList.remove('poem-line--fade-out');
-                                                  secondaryEl.style.opacity = '1';
-                                                  secondaryEl.classList.add('poem-strong');
-
-                                                  typeText(secondaryEl, secondaryFifthText, {
-                                                    baseDelay: 90,
-                                                    jitterMax: 70,
-                                                    onComplete: () => {
-                                                      secondaryEl.classList.add('poem-line--fade-out');
-
-                                                      // 7. Secondary final: "I am making all things" (persistent)
-                                                      if (secondaryEl && secondarySixthText) {
-                                                        setTimeout(() => {
-                                                          secondaryEl.classList.remove('poem-line--fade-out');
-                                                          secondaryEl.classList.remove('poem-strong');
-                                                          secondaryEl.classList.add('poem-final-emphasis');
-                                                          secondaryEl.style.opacity = '1';
-
-                                                          typeText(secondaryEl, secondarySixthText, {
-                                                            baseDelay: 125, // ~10% faster than 140ms for the final phrase
-                                                            jitterMax: 70,
-                                                            onComplete: () => {
-                                                              // After the final phrase, underline "all" with a small manic_emphasis mark.
-                                                              const full = secondaryEl.textContent || '';
-                                                              const target = 'all';
-                                                              const idx = full.indexOf(target);
-                                                              if (idx !== -1) {
-                                                                const before = full.slice(0, idx);
-                                                                const after = full.slice(idx + target.length);
-                                                                secondaryEl.innerHTML =
-                                                                  before + '<span class="poem-all">' + target + '</span>' + after;
-                                                              }
-
-                                                              // Then fade it out and write "BEGIN AGAIN" one line lower
-                                                              // (using the tertiary line) before revealing the CTA.
-                                                              if (tertiaryEl && secondaryBeginText) {
-                                                                secondaryEl.classList.add('poem-line--fade-out');
-                                                                setTimeout(() => {
-                                                                  secondaryEl.classList.remove('poem-line--fade-out');
-                                                                  secondaryEl.style.opacity = '0';
-
-                                                                  // Prepare the tertiary line as the final BEGIN AGAIN line.
-                                                                  tertiaryEl.classList.remove('poem-line--fade-out');
-                                                                  tertiaryEl.style.opacity = '1';
-                                                                  tertiaryEl.classList.add('poem-final-emphasis');
-                                                                  tertiaryEl.textContent = '';
-
-                                                                  typeText(tertiaryEl, secondaryBeginText, {
-                                                                    baseDelay: 120,
-                                                                    jitterMax: 70,
-                                                                    onComplete: () => {
-                                                                      // After BEGIN AGAIN is fully written, wait 2s, then
-                                                                      // append " with Nathan Gernetzky" on the same line.
-                                                                      setTimeout(() => {
-                                                                        // Append the suffix without reanimating BEGIN AGAIN.
-                                                                        appendText(tertiaryEl, secondaryWithText, {
-                                                                          baseDelay: 80,
-                                                                          jitterMax: 40,
-                                                                          onComplete: () => {
-                                                                            if (heroCtas) {
-                                                                              heroCtas.classList.add('hero-ctas--visible');
-                                                                              heroCtas.setAttribute('aria-hidden', 'false');
-                                                                            }
-                                                                          },
-                                                                        });
-                                                                      }, 1000);
-                                                                    },
-                                                                  });
-                                                                }, 800);
-                                                              } else if (heroCtas) {
-                                                                // Fallback: if begin-again text is missing, just show CTA.
-                                                                heroCtas.classList.add('hero-ctas--visible');
-                                                                heroCtas.setAttribute('aria-hidden', 'false');
-                                                              }
-                                                            },
-                                                          });
-                                                        }, 700);
-                                                      }
-                                                    },
-                                                  });
-                                                }, 700);
-                                              }
-                                            },
-                                          });
-                                        }, 700);
-                                      }
-                                    },
-                                  });
-                                }, 700);
-                              }
-                            },
-                          });
-                        }, 800);
-                      }
-                    },
-                  });
-                }, 500); // slight offset so fade + new writing overlap a bit
-              }
+              // After BEGIN AGAIN is written, append the name and reveal the CTA.
+              setTimeout(() => {
+                appendText(tertiaryEl, withText, {
+                  baseDelay: 90,
+                  jitterMax: 50,
+                  onComplete: () => {
+                    if (heroCtas) {
+                      heroCtas.classList.add('hero-ctas--visible');
+                      heroCtas.setAttribute('aria-hidden', 'false');
+                    }
+                  },
+                });
+              }, 1000);
             },
           });
         }, 400);
