@@ -199,13 +199,32 @@
 </head>
 <body>
   <main class="hero" aria-label="Homepage hero">
-    <section class="poem" aria-label="Begin Again">
+    <section class="poem" aria-label="Listen closely">
       <span
-        class="poem-line poem-final-emphasis"
+        class="poem-line poem-emphasis"
+        id="listen-text-primary"
+        data-text="LISTEN closely in the silence,"
+      ></span>
+      <span
+        class="poem-line poem-line--secondary"
+        id="listen-text-secondary"
+        data-text="in the ache that feels endless"
+        data-text-second="you will hear it"
+        data-text-third="a voice like water, running through stone"
+        data-text-fifth="saying..."
+        data-text-sixth="&quot;I am making all things NEW&quot;"
+        data-text-begin="BEGIN AGAIN"
+      ></span>
+      <span
+        class="poem-line poem-line--tertiary"
         id="listen-text-tertiary"
-        data-text="BEGIN AGAIn with Nathan Gernetzky"
+        data-text="in the rubble at your feet"
       ></span>
     </section>
+
+    <div class="hero-ctas" id="hero-ctas" aria-label="Primary actions" aria-hidden="true">
+      <a href="enter-site.html" class="hero-cta-button">Enter Site</a>
+    </div>
 
     <audio
       id="bg-audio"
@@ -243,10 +262,13 @@
         window.addEventListener('touchstart', enableAudioOnFirstInteraction, { once: true });
       }
 
-      const beginAgainEl = document.getElementById('listen-text-tertiary');
+      const primaryEl = document.getElementById('listen-text-primary');
+      const secondaryEl = document.getElementById('listen-text-secondary');
+      const tertiaryEl = document.getElementById('listen-text-tertiary');
+      const heroCtas = document.getElementById('hero-ctas');
 
       function typeText(el, text, options = {}) {
-        const { baseDelay = 100, jitterMax = 80, onComplete } = options;
+        const { baseDelay = 90, jitterMax = 80, onComplete } = options;
         let index = 0;
         el.textContent = '';
 
@@ -264,14 +286,195 @@
         step();
       }
 
-      if (beginAgainEl) {
-        const fullText = beginAgainEl.getAttribute('data-text') || '';
+      // Like typeText, but appends characters to the existing content instead of clearing.
+      function appendText(el, text, options = {}) {
+        const { baseDelay = 90, jitterMax = 80, onComplete } = options;
+        let index = 0;
 
-        // Start the single line after a short delay so the background and font settle.
+        const step = () => {
+          if (index < text.length) {
+            el.textContent += text.charAt(index);
+            index += 1;
+            const jitter = Math.random() * jitterMax;
+            setTimeout(step, baseDelay + jitter);
+          } else if (typeof onComplete === 'function') {
+            onComplete();
+          }
+        };
+
+        step();
+      }
+
+      if (primaryEl) {
+        const primaryText = primaryEl.getAttribute('data-text') || '';
+        const secondaryFirstText = secondaryEl?.getAttribute('data-text') || '';
+        const tertiaryText = tertiaryEl?.getAttribute('data-text') || '';
+        const secondarySecondText = secondaryEl?.getAttribute('data-text-second') || '';
+        const secondaryThirdText = secondaryEl?.getAttribute('data-text-third') || '';
+        const secondaryFifthText = secondaryEl?.getAttribute('data-text-fifth') || '';
+        const secondarySixthText = secondaryEl?.getAttribute('data-text-sixth') || '';
+        const secondaryBeginText = secondaryEl?.getAttribute('data-text-begin') || '';
+        const secondaryWithText = ' with Nathan Gernetzky';
+
+        // Start primary after a short delay for background/font
         setTimeout(() => {
-          typeText(beginAgainEl, fullText, {
-            baseDelay: 110,
-            jitterMax: 75,
+          typeText(primaryEl, primaryText, {
+            baseDelay: 95,
+            jitterMax: 80,
+            onComplete: () => {
+              // Fade out the primary line while starting secondary handwriting
+              primaryEl.classList.add('poem-line--fade-out');
+
+              // 2. Secondary (first): in the silence, in the ache that feels endless
+              if (secondaryEl && secondaryFirstText) {
+                setTimeout(() => {
+                  typeText(secondaryEl, secondaryFirstText, {
+                    baseDelay: 86,
+                    jitterMax: 70,
+                    onComplete: () => {
+                      secondaryEl.classList.add('poem-line--fade-out');
+
+                      // 3. "in the rubble at your feet" now appears on the secondary line,
+                      // shifted left using .poem-line--secondary-rubble.
+                      if (secondaryEl && tertiaryText) {
+                        setTimeout(() => {
+                          secondaryEl.classList.remove('poem-line--fade-out');
+                          secondaryEl.style.opacity = '1';
+                          secondaryEl.classList.add('poem-line--secondary-rubble');
+
+                          typeText(secondaryEl, tertiaryText, {
+                            baseDelay: 90,
+                            jitterMax: 70,
+                            onComplete: () => {
+                              secondaryEl.classList.remove('poem-line--secondary-rubble');
+                              secondaryEl.classList.add('poem-line--fade-out');
+
+                              // 4. Secondary (second): you will hear it
+                              if (secondaryEl && secondarySecondText) {
+                                setTimeout(() => {
+                                  secondaryEl.classList.remove('poem-line--fade-out');
+                                  secondaryEl.style.opacity = '1';
+
+                                  typeText(secondaryEl, secondarySecondText, {
+                                    baseDelay: 90,
+                                    jitterMax: 70,
+                                    onComplete: () => {
+                                      secondaryEl.classList.add('poem-line--fade-out');
+
+                                      // 5. Secondary (third): a voice like water, running through stone
+                                      if (secondaryEl && secondaryThirdText) {
+                                        setTimeout(() => {
+                                          secondaryEl.classList.remove('poem-line--fade-out');
+                                          secondaryEl.style.opacity = '1';
+
+                                          typeText(secondaryEl, secondaryThirdText, {
+                                            baseDelay: 90,
+                                            jitterMax: 70,
+                                            onComplete: () => {
+                                              secondaryEl.classList.add('poem-line--fade-out');
+
+                                              // 6. Secondary once more: "saying,"
+                                              if (secondaryEl && secondaryFifthText) {
+                                                setTimeout(() => {
+                                                  secondaryEl.classList.remove('poem-line--fade-out');
+                                                  secondaryEl.style.opacity = '1';
+                                                  secondaryEl.classList.add('poem-strong');
+
+                                                  typeText(secondaryEl, secondaryFifthText, {
+                                                    baseDelay: 90,
+                                                    jitterMax: 70,
+                                                    onComplete: () => {
+                                                      secondaryEl.classList.add('poem-line--fade-out');
+
+                                                      // 7. Secondary final: "I am making all things" (persistent)
+                                                      if (secondaryEl && secondarySixthText) {
+                                                        setTimeout(() => {
+                                                          secondaryEl.classList.remove('poem-line--fade-out');
+                                                          secondaryEl.classList.remove('poem-strong');
+                                                          secondaryEl.classList.add('poem-final-emphasis');
+                                                          secondaryEl.style.opacity = '1';
+
+                                                          typeText(secondaryEl, secondarySixthText, {
+                                                            baseDelay: 125, // ~10% faster than 140ms for the final phrase
+                                                            jitterMax: 70,
+                                                            onComplete: () => {
+                                                              // After the final phrase, underline "all" with a small manic_emphasis mark.
+                                                              const full = secondaryEl.textContent || '';
+                                                              const target = 'all';
+                                                              const idx = full.indexOf(target);
+                                                              if (idx !== -1) {
+                                                                const before = full.slice(0, idx);
+                                                                const after = full.slice(idx + target.length);
+                                                                secondaryEl.innerHTML =
+                                                                  before + '<span class="poem-all">' + target + '</span>' + after;
+                                                              }
+
+                                                              // Then fade it out and write "BEGIN AGAIN" one line lower
+                                                              // (using the tertiary line) before revealing the CTA.
+                                                              if (tertiaryEl && secondaryBeginText) {
+                                                                secondaryEl.classList.add('poem-line--fade-out');
+                                                                setTimeout(() => {
+                                                                  secondaryEl.classList.remove('poem-line--fade-out');
+                                                                  secondaryEl.style.opacity = '0';
+
+                                                                  // Prepare the tertiary line as the final BEGIN AGAIN line.
+                                                                  tertiaryEl.classList.remove('poem-line--fade-out');
+                                                                  tertiaryEl.style.opacity = '1';
+                                                                  tertiaryEl.classList.add('poem-final-emphasis');
+                                                                  tertiaryEl.textContent = '';
+
+                                                                  typeText(tertiaryEl, secondaryBeginText, {
+                                                                    baseDelay: 120,
+                                                                    jitterMax: 70,
+                                                                    onComplete: () => {
+                                                                      // After BEGIN AGAIN is fully written, wait 2s, then
+                                                                      // append " with Nathan Gernetzky" on the same line.
+                                                                      setTimeout(() => {
+                                                                        // Append the suffix without reanimating BEGIN AGAIN.
+                                                                        appendText(tertiaryEl, secondaryWithText, {
+                                                                          baseDelay: 80,
+                                                                          jitterMax: 40,
+                                                                          onComplete: () => {
+                                                                            if (heroCtas) {
+                                                                              heroCtas.classList.add('hero-ctas--visible');
+                                                                              heroCtas.setAttribute('aria-hidden', 'false');
+                                                                            }
+                                                                          },
+                                                                        });
+                                                                      }, 1000);
+                                                                    },
+                                                                  });
+                                                                }, 800);
+                                                              } else if (heroCtas) {
+                                                                // Fallback: if begin-again text is missing, just show CTA.
+                                                                heroCtas.classList.add('hero-ctas--visible');
+                                                                heroCtas.setAttribute('aria-hidden', 'false');
+                                                              }
+                                                            },
+                                                          });
+                                                        }, 700);
+                                                      }
+                                                    },
+                                                  });
+                                                }, 700);
+                                              }
+                                            },
+                                          });
+                                        }, 700);
+                                      }
+                                    },
+                                  });
+                                }, 700);
+                              }
+                            },
+                          });
+                        }, 800);
+                      }
+                    },
+                  });
+                }, 500); // slight offset so fade + new writing overlap a bit
+              }
+            },
           });
         }, 400);
       }
