@@ -45,7 +45,8 @@
       background-repeat: no-repeat;
       z-index: -1;
       transform-origin: center;
-      animation: hero-bg-zoom 43s ease-out forwards; /* ~20% slower than 36s, but still spans full text sequence */
+      /* Keep the background gently moving the whole time the visitor is on the page */
+      animation: hero-bg-zoom 70s linear infinite alternate;
     }
 
     .hero {
