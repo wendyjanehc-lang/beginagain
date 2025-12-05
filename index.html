@@ -46,7 +46,7 @@
       z-index: -1;
       transform-origin: center;
       /* Keep the background gently moving the whole time the visitor is on the page */
-      animation: hero-bg-zoom 70s linear infinite alternate;
+      animation: hero-bg-zoom 56s linear infinite alternate; /* ~20% faster than 70s */
     }
 
     .hero {
@@ -309,8 +309,28 @@
       if (tertiaryEl) {
         const beginText = secondaryEl?.getAttribute('data-text-begin') || 'BEGIN AGAIN';
         const withText = ' with Nathan Gernetzky';
+        const fullText = beginText + withText;
 
         tertiaryEl.classList.add('poem-final-emphasis');
+
+        // If the visitor has already seen the BEGIN AGAIN animation in this browser,
+        // show the final text immediately (no re-animation) but keep the background moving.
+        let hasSeenBeginAgain = false;
+        try {
+          hasSeenBeginAgain = window.localStorage.getItem('beginAgainSeen') === 'true';
+        } catch (e) {
+          // localStorage may be unavailable (e.g., privacy mode); fall back to animating.
+        }
+
+        if (hasSeenBeginAgain) {
+          tertiaryEl.textContent = fullText;
+          if (heroCtas) {
+            heroCtas.classList.add('hero-ctas--visible');
+            heroCtas.setAttribute('aria-hidden', 'false');
+          }
+          return;
+        }
+
         tertiaryEl.textContent = '';
 
         // Give the background and font a moment to settle, then type the line.
@@ -325,6 +345,11 @@
                   baseDelay: 90,
                   jitterMax: 50,
                   onComplete: () => {
+                    try {
+                      window.localStorage.setItem('beginAgainSeen', 'true');
+                    } catch (e) {
+                      // Ignore storage errors; animation has already played.
+                    }
                     if (heroCtas) {
                       heroCtas.classList.add('hero-ctas--visible');
                       heroCtas.setAttribute('aria-hidden', 'false');
