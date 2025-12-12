@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Enter Site</title>
+  <title>BEGIN AGAIN with Nathan Gernetzky</title>
   <style>
     @font-face {
       font-family: 'Manic';
@@ -13,65 +13,687 @@
       font-display: swap;
     }
 
-    body {
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
       margin: 0;
+      padding: 0;
+    }
+
+    body {
       min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       font-family: -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
       background: #050814;
       color: #ffffff;
+      display: flex;
+      flex-direction: column;
     }
 
-    main {
-      text-align: center;
-      padding: 2rem 3rem;
+    /* Header */
+    .site-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 1.5rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 100;
+      background: linear-gradient(to bottom, rgba(5, 8, 20, 0.9) 0%, transparent 100%);
     }
 
-    h1 {
-      font-family: 'Manic', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
-      font-size: 2.2rem;
-      letter-spacing: 0.08em;
+    .logo {
+      font-family: 'Manic', sans-serif;
+      font-size: 1.8rem;
+      letter-spacing: 0.12em;
+      color: #ffffff;
+      text-decoration: none;
       text-transform: uppercase;
-      margin-bottom: 1.5rem;
+      opacity: 0.9;
+      transition: opacity 0.3s ease;
     }
 
-    p {
-      max-width: 32rem;
-      margin: 0 auto 2.5rem;
-      line-height: 1.7;
+    .logo:hover {
+      opacity: 1;
+    }
+
+    .logo-subtitle {
+      font-family: 'Manic', sans-serif;
+      font-size: 1.8rem;
+      letter-spacing: 0.12em;
+      margin-left: 0.3rem;
+      text-transform: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+    }
+
+    .nav-link {
+      font-family: 'Manic', sans-serif;
       font-size: 1rem;
+      letter-spacing: 0.12em;
+      color: #ffffff;
+      text-decoration: none;
+      text-transform: uppercase;
+      opacity: 0.8;
+      transition: opacity 0.3s ease;
     }
 
-    a.back-link {
+    .nav-link:hover {
+      opacity: 1;
+    }
+
+    /* Intro Quote - Centered on screen initially */
+    .intro-quote {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: 'Manic', sans-serif;
+      font-size: 3.5rem;
+      letter-spacing: 0.08em;
+      text-align: center;
+      z-index: 50;
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .intro-quote.fade-out {
+      opacity: 0;
+      transform: translate(-50%, -60%);
+    }
+
+    @media (max-width: 600px) {
+      .intro-quote {
+        font-size: 2.2rem;
+        padding: 0 2rem;
+      }
+    }
+
+    /* Stories Section */
+    .stories-section {
+      padding: 2rem 2rem 3rem;
+      max-width: 1100px;
+      margin: auto auto 10vh;
+      position: relative;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.8s ease 0.2s, transform 0.8s ease 0.2s;
+      width: 100%;
+    }
+
+    .stories-section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Full background image behind the stories section */
+    .stories-background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('Images/surfing3withperson.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      z-index: -1;
+      opacity: 0.3;
+      filter: sepia(0.4) saturate(1.2) hue-rotate(180deg) brightness(0.9);
+    }
+
+    /* Card Grid */
+    .story-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+    }
+
+    @media (max-width: 600px) {
+      .story-grid {
+        grid-template-columns: 1fr;
+        gap: 1.25rem;
+      }
+    }
+
+    @media (min-width: 900px) {
+      .story-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1.25rem;
+      }
+    }
+
+    /* Story Card */
+    .story-card {
+      position: relative;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+      gap: 0.5rem;
+    }
+
+    .card-element {
+      width: 50px;
+      height: auto;
+      filter: invert(1);
+      opacity: 0.8;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      margin-top: -0.5rem;
+    }
+
+    .card-icon {
+      width: 40px;
+      height: 40px;
+      margin-top: 0.5rem;
+      opacity: 0.85;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .card-icon path,
+    .card-icon line,
+    .card-icon circle {
+      stroke: #ffffff;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+    }
+
+    .story-card:hover .card-icon {
+      opacity: 1;
+      transform: scale(1.1);
+    }
+
+    .story-card:hover .card-element {
+      opacity: 1;
+      transform: scale(1.05);
+    }
+
+    .card-element-text {
+      font-family: 'Manic', sans-serif;
+    }
+
+    .card-title {
+      position: relative;
+      z-index: 2;
+      font-family: 'Manic', sans-serif;
+      font-size: 2rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      transition: transform 0.4s ease;
+    }
+
+    @media (min-width: 900px) {
+      .card-title {
+        font-size: 1.6rem;
+      }
+    }
+
+    /* Card Hover Effects */
+    .story-card:hover .card-background {
+      transform: scale(1.05);
+    }
+
+    .story-card:hover .card-title {
+      transform: scale(1.05);
+    }
+
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(5, 8, 20, 0.97);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.4s ease, visibility 0.4s ease;
+      padding: 2rem;
+      overflow-y: auto;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal-content {
+      max-width: 540px;
+      width: 100%;
+      text-align: center;
+      transform: translateY(20px);
+      transition: transform 0.4s ease;
+      padding: 1rem;
+    }
+
+    .modal-overlay.active .modal-content {
+      transform: translateY(0);
+    }
+
+    .modal-close {
+      position: fixed;
+      top: 1.5rem;
+      right: 1.5rem;
+      background: none;
+      border: none;
+      color: #ffffff;
+      font-size: 2rem;
+      cursor: pointer;
+      opacity: 0.6;
+      transition: opacity 0.2s ease;
+      line-height: 1;
+      padding: 0.5rem;
+    }
+
+    .modal-close:hover {
+      opacity: 1;
+    }
+
+    .modal-title {
+      font-family: 'Manic', sans-serif;
+      font-size: 2.8rem;
+      letter-spacing: 0.1em;
+      margin-bottom: 2.5rem;
+      text-transform: uppercase;
+    }
+
+    .modal-poem {
+      font-size: 1.05rem;
+      line-height: 2;
+      margin-bottom: 3rem;
+      white-space: pre-line;
+      opacity: 0.9;
+      font-style: italic;
+    }
+
+    /* Audio Player */
+    .audio-player {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      padding: 1rem 1.25rem;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .play-pause-btn {
+      width: 44px;
+      height: 44px;
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      background: transparent;
+      color: #ffffff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: background 0.2s ease, border-color 0.2s ease;
+    }
+
+    .play-pause-btn:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.6);
+    }
+
+    .play-pause-btn svg {
+      width: 18px;
+      height: 18px;
+      fill: currentColor;
+    }
+
+    .progress-container {
+      flex: 1;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.15);
+      cursor: pointer;
+      position: relative;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: #ffffff;
+      width: 0%;
+      transition: width 0.1s linear;
+    }
+
+    .time-display {
+      font-size: 0.8rem;
+      opacity: 0.6;
+      white-space: nowrap;
+      min-width: 85px;
+      text-align: right;
+    }
+
+    /* Download Button */
+    .download-btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      padding: 0.7rem 2rem;
-      border-radius: 0;
-      border: 1px solid rgba(255, 255, 255, 0.65);
+      padding: 0.9rem 2.5rem;
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      background: transparent;
       color: #ffffff;
       text-decoration: none;
-      letter-spacing: 0.16em;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
-      font-size: 0.82rem;
+      font-size: 0.8rem;
+      transition: background 0.2s ease, border-color 0.2s ease;
     }
 
-    a.back-link:hover,
-    a.back-link:focus-visible {
-      background: rgba(255, 255, 255, 0.08);
+    .download-btn:hover {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(255, 255, 255, 0.7);
+    }
+
+    /* Icon visibility */
+    .icon-pause {
+      display: none;
+    }
+
+    .playing .icon-play {
+      display: none;
+    }
+
+    .playing .icon-pause {
+      display: block;
     }
   </style>
 </head>
 <body>
-  <main>
-    <h1>BEGIN AGAIN</h1>
-    <p>
-      This page is a simple placeholder for your main site content. Replace this text with
-      navigation, sections, or any layout you want visitors to see after the intro animation.
-    </p>
-    <a href="index.html" class="back-link">Back to Intro</a>
+  <!-- Header -->
+  <header class="site-header">
+    <a href="index.html" class="logo">BEGIN AGAIN <span class="logo-subtitle">with Nathan Gernetzky</span></a>
+    <nav class="nav-links">
+      <a href="about.html" class="nav-link">About</a>
+      <a href="contact.html" class="nav-link">Contact</a>
+    </nav>
+  </header>
+
+  <!-- Intro Quote (appears first) -->
+  <p class="intro-quote" id="intro-quote"></p>
+
+  <!-- Background image for stories section -->
+  <div class="stories-background"></div>
+
+  <!-- Stories Section -->
+  <main class="stories-section" id="stories-section">
+    <div class="story-grid">
+      <!-- GRIEF -->
+      <article class="story-card" data-story="grief">
+        <h3 class="card-title">Grief</h3>
+        <img src="Images/manic_emphasis-01.png" alt="" class="card-element">
+      </article>
+
+      <!-- HOPE -->
+      <article class="story-card" data-story="hope">
+        <h3 class="card-title">Hope</h3>
+        <img src="Images/manic_emphasis-03.png" alt="" class="card-element">
+      </article>
+
+      <!-- GRACE -->
+      <article class="story-card" data-story="grace">
+        <h3 class="card-title">Grace</h3>
+        <img src="Images/manic_line-08.png" alt="" class="card-element">
+      </article>
+
+      <!-- FAITH -->
+      <article class="story-card" data-story="faith">
+        <h3 class="card-title">Faith</h3>
+        <img src="Images/manic_emphasis-03.png" alt="" class="card-element">
+      </article>
+    </div>
   </main>
+
+  <!-- Modal -->
+  <div class="modal-overlay" id="modal-overlay" aria-hidden="true">
+    <button class="modal-close" aria-label="Close">&times;</button>
+    <div class="modal-content">
+      <h2 class="modal-title" id="modal-title"></h2>
+
+      <p class="modal-poem" id="modal-poem"></p>
+
+      <!-- Audio Player -->
+      <div class="audio-player">
+        <button class="play-pause-btn" id="play-pause-btn" aria-label="Play">
+          <svg class="icon-play" viewBox="0 0 24 24">
+            <polygon points="6,3 20,12 6,21" />
+          </svg>
+          <svg class="icon-pause" viewBox="0 0 24 24">
+            <rect x="5" y="3" width="4" height="18" />
+            <rect x="15" y="3" width="4" height="18" />
+          </svg>
+        </button>
+        <div class="progress-container" id="progress-container">
+          <div class="progress-bar" id="progress-bar"></div>
+        </div>
+        <span class="time-display" id="time-display">0:00 / 0:00</span>
+      </div>
+
+      <audio id="modal-audio" preload="metadata"></audio>
+
+      <a href="#" class="download-btn" id="download-btn" download>Download</a>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Typewriter animation for hero quote
+      function typeText(el, text, options = {}) {
+        const { baseDelay = 100, jitterMax = 80, onComplete } = options;
+        let index = 0;
+        el.textContent = '';
+
+        const step = () => {
+          if (index < text.length) {
+            el.textContent += text.charAt(index);
+            index += 1;
+            const jitter = Math.random() * jitterMax;
+            setTimeout(step, baseDelay + jitter);
+          } else if (typeof onComplete === 'function') {
+            onComplete();
+          }
+        };
+
+        step();
+      }
+
+      // Intro animation sequence
+      const introQuote = document.getElementById('intro-quote');
+      const storiesSection = document.getElementById('stories-section');
+
+      if (introQuote) {
+        // Start typing the intro quote after a short delay
+        setTimeout(() => {
+          typeText(introQuote, 'A story in four parts', {
+            baseDelay: 90,
+            jitterMax: 60,
+            onComplete: () => {
+              // After typing completes, wait a moment then fade out quote and show content
+              setTimeout(() => {
+                introQuote.classList.add('fade-out');
+
+                // Show stories section
+                setTimeout(() => {
+                  if (storiesSection) storiesSection.classList.add('visible');
+                }, 400);
+              }, 1200);
+            }
+          });
+        }, 800);
+      }
+
+      // Story data
+      const stories = {
+        grief: {
+          title: 'Grief',
+          poem: `When sorrow fills the empty space
+where joy once lived and breathed,
+know that grief is love's own face
+for what cannot be retrieved.
+
+Let the tears become a river,
+let the ache speak what words cannot,
+for in the breaking, hearts deliver
+truths we thought we had forgot.`,
+          audio: 'Audio/HOPE.mp3'
+        },
+        hope: {
+          title: 'Hope',
+          poem: `In darkness, a single flame persists,
+a stubborn light that won't give in,
+through every shadow that exists,
+hope finds a way to begin again.
+
+It whispers softly in the night,
+a promise held in morning dew,
+that after darkness comes the light,
+and broken things are made brand new.`,
+          audio: 'Audio/HOPE.mp3'
+        },
+        grace: {
+          title: 'Grace',
+          poem: `Unearned, unasked, freely given,
+a gift that falls like morning rain,
+by grace alone, the heart is driven
+to rise and try and love again.
+
+It meets us in our lowest places,
+where shame has made its heavy home,
+and fills the cracks and empty spaces
+so we never walk alone.`,
+          audio: 'Audio/HOPE.mp3'
+        },
+        faith: {
+          title: 'Faith',
+          poem: `To trust in what we cannot see,
+to walk a path not yet revealed,
+faith sets the captive spirit free
+and makes the wounded heart be healed.
+
+It is the anchor in the storm,
+the hand that reaches through the dark,
+the quiet hope that keeps us warm
+when life has left its heavy mark.`,
+          audio: 'Audio/HOPE.mp3'
+        }
+      };
+
+      // DOM elements
+      const cards = document.querySelectorAll('.story-card');
+      const modal = document.getElementById('modal-overlay');
+      const modalTitle = document.getElementById('modal-title');
+      const modalPoem = document.getElementById('modal-poem');
+      const modalAudio = document.getElementById('modal-audio');
+      const playPauseBtn = document.getElementById('play-pause-btn');
+      const progressBar = document.getElementById('progress-bar');
+      const progressContainer = document.getElementById('progress-container');
+      const timeDisplay = document.getElementById('time-display');
+      const downloadBtn = document.getElementById('download-btn');
+      const closeBtn = document.querySelector('.modal-close');
+
+      // Format time as m:ss
+      function formatTime(seconds) {
+        if (isNaN(seconds)) return '0:00';
+        const mins = Math.floor(seconds / 60);
+        const secs = Math.floor(seconds % 60);
+        return `${mins}:${secs.toString().padStart(2, '0')}`;
+      }
+
+      // Open modal
+      function openModal(storyKey) {
+        const story = stories[storyKey];
+        if (!story) return;
+
+        modalTitle.textContent = story.title;
+        modalPoem.textContent = story.poem;
+        modalAudio.src = story.audio;
+        downloadBtn.href = story.audio;
+
+        modal.classList.add('active');
+        modal.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+      }
+
+      // Close modal
+      function closeModal() {
+        modal.classList.remove('active');
+        modal.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+
+        // Stop and reset audio
+        modalAudio.pause();
+        modalAudio.currentTime = 0;
+        playPauseBtn.classList.remove('playing');
+        progressBar.style.width = '0%';
+        timeDisplay.textContent = '0:00 / 0:00';
+      }
+
+      // Toggle play/pause
+      function togglePlayPause() {
+        if (modalAudio.paused) {
+          modalAudio.play();
+          playPauseBtn.classList.add('playing');
+        } else {
+          modalAudio.pause();
+          playPauseBtn.classList.remove('playing');
+        }
+      }
+
+      // Update progress bar
+      function updateProgress() {
+        const percent = (modalAudio.currentTime / modalAudio.duration) * 100;
+        progressBar.style.width = `${percent}%`;
+        timeDisplay.textContent = `${formatTime(modalAudio.currentTime)} / ${formatTime(modalAudio.duration)}`;
+      }
+
+      // Seek audio
+      function seekAudio(e) {
+        const rect = progressContainer.getBoundingClientRect();
+        const percent = (e.clientX - rect.left) / rect.width;
+        modalAudio.currentTime = percent * modalAudio.duration;
+      }
+
+      // Event listeners
+      cards.forEach(card => {
+        card.addEventListener('click', () => {
+          openModal(card.dataset.story);
+        });
+      });
+
+      closeBtn.addEventListener('click', closeModal);
+
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.classList.contains('active')) {
+          closeModal();
+        }
+      });
+
+      playPauseBtn.addEventListener('click', togglePlayPause);
+      modalAudio.addEventListener('timeupdate', updateProgress);
+      modalAudio.addEventListener('ended', () => {
+        playPauseBtn.classList.remove('playing');
+      });
+      progressContainer.addEventListener('click', seekAudio);
+
+      // Update time display when metadata loads
+      modalAudio.addEventListener('loadedmetadata', () => {
+        timeDisplay.textContent = `0:00 / ${formatTime(modalAudio.duration)}`;
+      });
+    });
+  </script>
 </body>
 </html>
